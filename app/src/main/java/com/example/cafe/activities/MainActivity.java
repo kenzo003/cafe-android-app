@@ -51,33 +51,40 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                if (item.getItemId() == R.id.btn_account){
-                    navController.popBackStack(R.id.accountFragment, true);
-                    setTitle(item.getTitle());
-                }
-                if (item.getItemId() == R.id.btn_catalog){
-                    navController.popBackStack(R.id.catalogFragment, true);
-                    setTitle(item.getTitle());
-                }
-                if (item.getItemId() == R.id.btn_basket){
-                    navController.popBackStack(R.id.basketFragment, true);
-                    setTitle(item.getTitle());
-                }
-                if (item.getItemId() == R.id.btn_news){
-                    navController.popBackStack(R.id.newsFragment,true);
-                    setTitle(item.getTitle());
-                }
-                if (item.getItemId() == R.id.btn_promo){
-//                    navController.navigate(R.id.catalogFragment);
-                    setTitle(item.getTitle());
-                }
-//                item.setChecked(true);
-                Toast.makeText(getApplicationContext(), item.getTitle().toString(), Toast.LENGTH_LONG).show();
+                //Извлекаем все Fragment из backstack
+                navController.popBackStack();
 
+                switch (item.getItemId()) {
+                    case R.id.btn_news: {
+                        navController.navigate(R.id.newsFragment);
+                        setTitle(item.getTitle());
+                        break;
+                    }
+                    case R.id.btn_catalog: {
+                        navController.navigate(R.id.catalogFragment);
+                        setTitle(item.getTitle());
+                        break;
+                    }
+                    case R.id.btn_promo: {
+                        setTitle(item.getTitle());
+                        break;
+                    }
+                    case R.id.btn_basket: {
+                        navController.navigate(R.id.basketFragment);
+                        setTitle(item.getTitle());
+                        break;
+                    }
+                    case R.id.btn_account: {
+                        navController.navigate(R.id.accountFragment);
+                        setTitle(item.getTitle());
+                        break;
+                    }
+                    default:
+                        return false;
+                }
                 return true;
             }
         });
-
     }
 
 

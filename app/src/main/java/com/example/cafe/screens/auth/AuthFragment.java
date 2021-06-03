@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.cafe.R;
+import com.example.cafe.databinding.AuthFragmentBinding;
 
 public class AuthFragment extends Fragment {
 
     private AuthViewModel mViewModel;
+    private AuthFragmentBinding mBinding;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -25,7 +27,8 @@ public class AuthFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.auth_fragment, container, false);
+        mBinding = AuthFragmentBinding.inflate(inflater);
+        return mBinding.getRoot();
     }
 
     @Override
