@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/newsFragment">
+
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.cafe.screens.account.AccountFragment"
+        android:label="account_fragment"
+        tools:layout="@layout/account_fragment" />
+    <fragment
+        android:id="@+id/basketFragment"
+        android:name="com.example.cafe.screens.basket.BasketFragment"
+        android:label="basket_fragment"
+        tools:layout="@layout/basket_fragment" />
+    <fragment
+        android:id="@+id/catalogFragment"
+        android:name="com.example.cafe.screens.catalog.CatalogFragment"
+        android:label="catalog_fragment"
+        tools:layout="@layout/catalog_fragment" />
+    <fragment
+        android:id="@+id/newsFragment"
+        android:name="com.example.cafe.screens.news.NewsFragment"
+        android:label="news_fragment"
+        tools:layout="@layout/news_fragment" />
+</navigation>

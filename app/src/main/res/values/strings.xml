@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Cafe</string>
+    <string name="btnHome">Главная</string>
+    <string name="btnCatalog">Каталог</string>
+    <string name="btnBasket">Корзина</string>
+    <string name="btnNews">Новости</string>
+    <string name="btnAccount">Профиль</string>
+    <string name="btnPromo">Акции</string>
+</resources>
