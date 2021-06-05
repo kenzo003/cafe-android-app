@@ -1,9 +1,27 @@
 <resources>
     <string name="app_name">Cafe</string>
+    <string name="please_enter_passcode">Enter a passcode of 4-6 digits</string>
+    <string name="lock_input_again">Re-enter new passcode</string>
+    <string name="lock_input_not_match">Passcodes do not match.</string>
     <string name="btnHome">Главная</string>
     <string name="btnCatalog">Каталог</string>
     <string name="btnBasket">Корзина</string>
     <string name="btnNews">Новости</string>
     <string name="btnAccount">Профиль</string>
     <string name="btnPromo">Акции</string>
+    <string name="login">Войти</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="check_in">Регистрация</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="date_of_birth">Дата рождения</string>
+    <string name="city">Город</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="email">Email</string>
+    <string name="gender_m">Муж</string>
+    <string name="gender_w">Жен</string>
+    <string name="register">Зарегестрироваться</string>
+    <string name="or">или</string>
+    <string name="create_new_account">создать новый аккаунт</string>
+    <string name="password">Пароль</string>
 </resources>

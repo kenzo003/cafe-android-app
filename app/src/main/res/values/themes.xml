@@ -4,11 +4,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSurface">@color/colorSurface</item>
         <item name="toolbarStyle">@style/Theme.Cafe.Toolbar</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
     </style>
 
 
+    <color name="colorAccent">#0EBBFF</color>
 </resources>

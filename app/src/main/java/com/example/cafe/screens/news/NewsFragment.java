@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.cafe.R;
 
+//TODO Может быть стоит использовать Общий шаблон для создания Fragment (5)
 public class NewsFragment extends Fragment {
 
     private NewsViewModel mViewModel;

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/newsFragment">
+    >
 
     <fragment
         android:id="@+id/accountFragment"
@@ -25,4 +25,42 @@
         android:name="com.example.cafe.screens.news.NewsFragment"
         android:label="news_fragment"
         tools:layout="@layout/news_fragment" />
+    <fragment
+        android:id="@+id/loginFragment3"
+        android:name="com.example.cafe.screens.auth.LoginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_loginFragment3_to_authFragment2"
+            app:destination="@id/authFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_loginFragment3_to_enterPinFragment"
+            app:destination="@id/enterPinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.example.cafe.screens.auth.AuthFragment"
+        android:label="auth_fragment"
+        tools:layout="@layout/auth_fragment" >
+        <action
+            android:id="@+id/action_authFragment2_to_loginFragment3"
+            app:destination="@id/loginFragment3"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_authFragment2_to_enterPinFragment"
+            app:destination="@id/enterPinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterPinFragment"
+        android:name="com.example.cafe.screens.auth.EnterPinFragment"
+        android:label="enter_pin_fragment"
+        tools:layout="@layout/enter_pin_fragment" >
+        <action
+            android:id="@+id/action_enterPinFragment_to_authFragment2"
+            app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_enterPinFragment_to_loginFragment3"
+            app:destination="@id/loginFragment3" />
+    </fragment>
 </navigation>
