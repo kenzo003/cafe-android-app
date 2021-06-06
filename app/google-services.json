@@ -1,33 +1,42 @@
 {
   "project_info": {
-    "project_number": "977346709737",
-    "project_id": "cafe-df9fe",
-    "storage_bucket": "cafe-df9fe.appspot.com"
+    "project_number": "62217210382",
+    "firebase_url": "https://cafe-cd7c9-default-rtdb.firebaseio.com",
+    "project_id": "cafe-cd7c9",
+    "storage_bucket": "cafe-cd7c9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:977346709737:android:37036c5a7b544739d40878",
+        "mobilesdk_app_id": "1:62217210382:android:e10bfafd9289edf7b74a5f",
         "android_client_info": {
           "package_name": "com.example.cafe"
         }
       },
       "oauth_client": [
         {
-          "client_id": "977346709737-6rudssdgh5vv96thjkkmtu3tp62d3j0n.apps.googleusercontent.com",
+          "client_id": "62217210382-o29i3v1mkbooah4cm9953evojt0nid5m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cafe",
+            "certificate_hash": "673c209ac345c64a24b5b800833ac7192ddf645e"
+          }
+        },
+        {
+          "client_id": "62217210382-ba8lrnb5309lb2kb604v59cd5o5vp6p2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC_wyOrOdDN5EogF2btL9UY4IN2A3pJb6Q"
+          "current_key": "AIzaSyAVvN4Xa1XKDuuYy0HqH5A7gHBhwA6EIp4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "977346709737-6rudssdgh5vv96thjkkmtu3tp62d3j0n.apps.googleusercontent.com",
+              "client_id": "62217210382-ba8lrnb5309lb2kb604v59cd5o5vp6p2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

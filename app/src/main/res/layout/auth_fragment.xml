@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:hint="@string/phone_number"
-            android:inputType="phone"
+            android:inputType="textEmailAddress"
 
             app:layout_constraintBottom_toTopOf="@id/af_edit_txt_password"
             app:layout_constraintEnd_toEndOf="parent"

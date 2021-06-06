@@ -10,13 +10,11 @@
     <View
         android:id="@+id/shape"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:background="@drawable/shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </View>
+        app:layout_constraintTop_toTopOf="parent"></View>
 
     <TextView
         android:id="@+id/lf_txt_v_check_in_title"
@@ -95,6 +93,15 @@
             android:autofillHints="@string/email"
             android:hint="@string/email"
             android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/lf_edit_txt_password"
+            style="@style/Theme.Cafe.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=" "
+            android:hint="@string/password"
+            android:inputType="textPassword" />
 
         <RadioGroup
             android:id="@+id/lf_edit_txt_gender"

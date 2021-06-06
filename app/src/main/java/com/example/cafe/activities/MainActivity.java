@@ -48,16 +48,20 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigation = mBinding.bottomNavigationView;
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         constants.APP_ACTIVITY = this;
+        constants.initFireBase();
     }
 
     private void initFunc() {
         setSupportActionBar(mToolbar);
         NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.navigation_graph);
 //        Не авторизован
-        if (true) {
+        if (constants.AUTH.getCurrentUser() == null) {
             navGraph.setStartDestination(R.id.authFragment);
             //Отображаем окно Авторизации
         } else {
+//            constants.AUTH.signOut();
+            constants.AUTH.getCurrentUser().getEmail().toString();
+            setTitle(constants.AUTH.getCurrentUser().getEmail().toString());
             mBottomNavigation.setVisibility(View.VISIBLE);
             mToolbar.setVisibility(View.VISIBLE);
 
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         navController.setGraph(navGraph);
     }
 
-    public void showToolbarAndNavBar(){
+    public void showToolbarAndNavBar() {
         mBottomNavigation.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
     }
@@ -105,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_account: {
                 navController.navigate(R.id.accountFragment);
                 setTitle(item.getTitle());
+                constants.AUTH.signOut();
+                finish();
                 break;
             }
             default:
@@ -112,5 +118,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
 }

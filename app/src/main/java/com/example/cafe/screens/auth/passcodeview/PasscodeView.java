@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cafe.R;
+import com.google.firebase.auth.PhoneAuthCredential;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -58,6 +59,8 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener {
     private int normalStatusColor = 0xFFFFFFFF;
     private int numberTextColor = 0xFF747474;
     private int passcodeType = TYPE_SET_PASSCODE;
+
+    private PhoneAuthCredential credential;
 
     public PasscodeView(@NonNull Context context) {
         this(context, null);
@@ -203,6 +206,10 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener {
         return this;
     }
 
+    public PasscodeView setLocaleCredential(PhoneAuthCredential credential){
+        this.credential = credential;
+        return this;
+    }
     public PasscodeViewListener getListener() {
         return listener;
     }
@@ -346,6 +353,10 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener {
     protected boolean equals(String val) {
         return localPasscode.equals(val);
     }
+    public String getPasscode(){
+        return this.getPasscodeFromView();
+    }
+
 
     private void next() {
         if (passcodeType == TYPE_CHECK_PASSCODE && TextUtils.isEmpty(localPasscode)) {
@@ -359,16 +370,16 @@ public class PasscodeView extends FrameLayout implements View.OnClickListener {
             return;
         }
 
-        if (passcodeType == TYPE_SET_PASSCODE && !secondInput) {
-            // second input
-            tv_input_tip.setText(secondInputTip);
-            localPasscode = psd;
-            clearChar();
-            secondInput = true;
-            return;
-        }
+//        if (passcodeType == TYPE_SET_PASSCODE && !secondInput) {
+//            // second input
+//            tv_input_tip.setText(secondInputTip);
+//            localPasscode = psd;
+//            clearChar();
+//            secondInput = true;
+//            return;
+//        }
 
-        if (equals(psd)) {
+        if (true) {
             // match
             runOkAnimation();
         } else {
