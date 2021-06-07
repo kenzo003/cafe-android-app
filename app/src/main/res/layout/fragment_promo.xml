@@ -3,17 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.account.AccountFragment">
+    tools:context=".screens.promo.PromoFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello User" />
-
-    <Button
-        android:id="@+id/af_btn_signout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Выход" />
+        android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>

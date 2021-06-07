@@ -30,7 +30,7 @@ public class AppFirebaseRepository implements DataBaseRepository {
 
     @Override
     public void updateUserInfo(String name, String surname, String email_address, String phone_number, String city, String gender, OnSuccessListener<? super Void> onSuccess, OnFailureListener onFail) {
-        User user = new User(name, surname, email_address, phone_number, city, gender);
+//        User user = new User(name, surname, email_address, phone_number, city, gender, );
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("USER_NAME", name);
 //        map.put("USER_SURNAME", surname);

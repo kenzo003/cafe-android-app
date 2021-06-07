@@ -57,12 +57,12 @@
         app:layout_constraintTop_toBottomOf="@id/lf_CL_header_auth">
 
         <EditText
-            android:id="@+id/af_edit_txt_phone"
+            android:id="@+id/af_edit_txt_email"
             style="@style/Theme.Cafe.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="@string/phone_number"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
 
             app:layout_constraintBottom_toTopOf="@id/af_edit_txt_password"
@@ -84,7 +84,7 @@
             app:layout_constraintBottom_toTopOf="@id/af_btn_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/af_edit_txt_phone" />
+            app:layout_constraintTop_toBottomOf="@id/af_edit_txt_email" />
 
         <Button
             android:id="@+id/af_btn_login"
