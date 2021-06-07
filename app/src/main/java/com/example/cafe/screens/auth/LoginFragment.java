@@ -56,41 +56,6 @@ public class LoginFragment extends Fragment {
     public void onStart() {
         super.onStart();
         init();
-//        mCallback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//            @Override
-//            public void onCodeSent(@NonNull @NotNull String id, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken token) {
-//                super.onCodeSent(id, token);
-//                Bundle bundle = new Bundle();
-//                bundle.putString("id", id);
-//                bundle.putString("phone", mPhoneNumber);
-//                constants.APP_ACTIVITY.navController.navigate(R.id.action_loginFragment3_to_enterPinFragment, bundle);
-//            }
-//
-//            @Override
-//            public void onVerificationCompleted(@NonNull @NotNull PhoneAuthCredential phoneAuthCredential) {
-//                constants.AUTH.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(getContext(), "Welcome", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(getContext(), task.getException().getMessage().toString(), Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    }
-//                });
-//            }
-//        };
-
-//        mBinding.lfBtnSignupEnter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                registerUser();
-////                MainActivity activity = (MainActivity) getActivity();
-////                activity.navController.popBackStack();
-////                activity.navController.navigate(R.id.newsFragment);
-//            }
-//        });
     }
 
     private void registerUser() {

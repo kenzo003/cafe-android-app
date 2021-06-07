@@ -93,7 +93,7 @@ public class AuthFragment extends Fragment {
                                         @Override
                                         public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
                                             constants.AUTH.signOut();
-                                            Toast.makeText(constants.APP_ACTIVITY.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+                                            Toast.makeText(constants.APP_ACTIVITY.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                                             Log.d(constants.TAG, e.getMessage());
                                         }
                                     }

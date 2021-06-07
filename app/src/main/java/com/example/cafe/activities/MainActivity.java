@@ -1,5 +1,6 @@
 package com.example.cafe.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,30 +11,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cafe.R;
 import com.example.cafe.databinding.ActivityMainBinding;
-import com.example.cafe.utilits.constants;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import org.jetbrains.annotations.NotNull;
+
+import static com.example.cafe.utilits.constants.APP_ACTIVITY;
+import static com.example.cafe.utilits.constants.AUTH;
+import static com.example.cafe.utilits.constants.initFireBase;
 
 ;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mBinding;
+    public NavController navController;
     BottomNavigationView mBottomNavigation;
     Toolbar mToolbar;
-    public NavController navController;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBinding = null;
     }
 
     @Override
@@ -46,22 +56,27 @@ public class MainActivity extends AppCompatActivity {
     private void initFields() {
         mToolbar = mBinding.toolbar;
         mBottomNavigation = mBinding.bottomNavigationView;
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        constants.APP_ACTIVITY = this;
-        constants.initFireBase();
+
+        NavHostFragment hostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = hostFragment.getNavController();
+//        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        APP_ACTIVITY = this;
+        initFireBase();
     }
 
+    @SuppressLint("RestrictedApi")
     private void initFunc() {
         setSupportActionBar(mToolbar);
         NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.navigation_graph);
+
 //        Не авторизован
-        if (constants.AUTH.getCurrentUser() == null) {
+        if (AUTH.getCurrentUser() == null) {
             navGraph.setStartDestination(R.id.authFragment);
             //Отображаем окно Авторизации
         } else {
 //            constants.AUTH.signOut();
-            constants.AUTH.getCurrentUser().getEmail().toString();
-            setTitle(constants.AUTH.getCurrentUser().getEmail().toString());
+            AUTH.getCurrentUser().getEmail().toString();
+            setTitle(AUTH.getCurrentUser().getEmail().toString());
             mBottomNavigation.setVisibility(View.VISIBLE);
             mToolbar.setVisibility(View.VISIBLE);
 
@@ -109,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_account: {
                 navController.navigate(R.id.accountFragment);
                 setTitle(item.getTitle());
-                constants.AUTH.signOut();
+                AUTH.signOut();
                 finish();
                 break;
             }

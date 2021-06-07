@@ -24,4 +24,5 @@
     <string name="or">или</string>
     <string name="create_new_account">создать новый аккаунт</string>
     <string name="password">Пароль</string>
+    <string name="forgot">Забыли пароль?</string>
 </resources>
