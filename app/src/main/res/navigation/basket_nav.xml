@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/basketFragment2"
         android:name="com.example.cafe.screens.basket.BasketFragment"
-        android:label="basket_fragment"
+        android:label="Корзина"
         tools:layout="@layout/basket_fragment" />
 </navigation>

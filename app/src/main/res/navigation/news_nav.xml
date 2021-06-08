@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/news_nav"
-    app:startDestination="@id/newsFragment2">
+    app:startDestination="@id/newsFragment2"
+    >
 
     <fragment
         android:id="@+id/newsFragment2"
         android:name="com.example.cafe.screens.news.NewsFragment"
-        android:label="news_fragment"
-        tools:layout="@layout/news_fragment" />
+        android:label="Новости"
+        tools:layout="Новости" />
 </navigation>

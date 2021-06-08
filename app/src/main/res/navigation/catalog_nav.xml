@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/catalogFragment2"
         android:name="com.example.cafe.screens.catalog.CatalogFragment"
-        android:label="catalog_fragment"
+        android:label="Каталог"
         tools:layout="@layout/catalog_fragment" />
 </navigation>

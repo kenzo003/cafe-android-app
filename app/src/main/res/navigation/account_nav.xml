@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.example.cafe.screens.account.AccountFragment"
-        android:label="account_fragment"
+        android:label="Профиль"
         tools:layout="@layout/account_fragment" />
 </navigation>

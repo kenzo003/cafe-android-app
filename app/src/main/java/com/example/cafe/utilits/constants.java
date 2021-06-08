@@ -27,6 +27,21 @@ public class constants {
     public static final String NODE_USERS = "users";
     public static String PHONE_NUMBER = "+16505550000";
 
+    //User
+    public static final String USER_ID = "user_id";
+
+
+    //News
+    public static final String NODE_NEWS = "news";
+    public static final String NEWS_ID = "news_id";
+    public static final String NEWS_HEADER = "header_text";
+    public static final String NEWS_DATA = "data";
+    public static final String NEWS_MEDIA = "media_id";
+    public static final String NEWS_DESC = "description";
+    public static final String NODE_NEWS_USERS = "NewsUser";
+    public static final String STORAGE_NODE_NEWS = "news/news_photo/";
+
+
     public static void initFireBase() {
         AUTH = FirebaseAuth.getInstance();
         REF_DATABASE_ROOT = FirebaseDatabase.getInstance().getReference();

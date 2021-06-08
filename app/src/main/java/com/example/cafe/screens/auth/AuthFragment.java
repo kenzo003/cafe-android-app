@@ -1,7 +1,6 @@
 package com.example.cafe.screens.auth;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +14,12 @@ import androidx.navigation.NavController;
 import com.example.cafe.R;
 import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.AuthFragmentBinding;
-import com.example.cafe.utilits.constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.*;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -78,53 +74,53 @@ public class AuthFragment extends Fragment {
                                             if (task.isSuccessful()) {
                                                 userViewModel.getUserMutableLiveData().postValue(FirebaseAuth.getInstance().getCurrentUser()); //TODO убрать, используется для отключения смс
 
-                                                if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() == null){
-                                                    FirebaseAuth.getInstance().getCurrentUser().delete();
-                                                    userViewModel.getMsg().postValue("Пустой номер телефона");
-                                                    return;
-                                                }
+//                                                if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() == null){
+//                                                    FirebaseAuth.getInstance().getCurrentUser().delete();
+//                                                    userViewModel.getMsg().postValue("Пустой номер телефона");
+//                                                    return;
+//                                                }
 
                                                 //TODO вернуть, для включения верикфикации смс
-                                                userViewModel.verificationSMS(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),
-                                                        constants.VER_CUR_USER, getActivity(),
-                                                        new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                                            @Override
-                                                            public void onVerificationCompleted(@NonNull @NotNull PhoneAuthCredential phoneAuthCredential) {
-                                                                userViewModel.getUserMutableLiveData().postValue(FirebaseAuth.getInstance().getCurrentUser());
-                                                            }
-                                                            @Override
-                                                            public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
-
-                                                                switch (constants.VER_CUR_USER) {
-                                                                    case constants.VER_CUR_USER: {
-                                                                        FirebaseAuth.getInstance().signOut();
-                                                                        break;
-                                                                    }
-                                                                    case constants.VER_CUR_USER_NEW_PHONE: {
-                                                                        FirebaseAuth.getInstance().getCurrentUser().delete();
-                                                                        break;
-                                                                    }
-                                                                    case constants.VER_NEW_USER: {
-                                                                        break;
-                                                                    }
-                                                                }
-                                                                userViewModel.getMsg().postValue(e.getMessage());
-                                                                Log.d(constants.TAG, e.getMessage());
-                                                            }
-
-                                                            @Override
-                                                            public void onCodeSent(@NonNull @NotNull String id, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                                                super.onCodeSent(id, forceResendingToken);
-                                                                Bundle bundle = new Bundle();
-                                                                bundle.putString("id", id);
-                                                                constants.APP_ACTIVITY.navController.navigate(R.id.action_authFragment2_to_enterPinFragment2, bundle);
-                                                            }
-
-                                                            @Override
-                                                            public void onCodeAutoRetrievalTimeOut(@NonNull @NotNull String s) {
-                                                                super.onCodeAutoRetrievalTimeOut(s);
-                                                            }
-                                                        });
+//                                                userViewModel.verificationSMS(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),
+//                                                        constants.VER_CUR_USER, getActivity(),
+//                                                        new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//                                                            @Override
+//                                                            public void onVerificationCompleted(@NonNull @NotNull PhoneAuthCredential phoneAuthCredential) {
+//                                                                userViewModel.getUserMutableLiveData().postValue(FirebaseAuth.getInstance().getCurrentUser());
+//                                                            }
+//                                                            @Override
+//                                                            public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
+//
+//                                                                switch (constants.VER_CUR_USER) {
+//                                                                    case constants.VER_CUR_USER: {
+//                                                                        FirebaseAuth.getInstance().signOut();
+//                                                                        break;
+//                                                                    }
+//                                                                    case constants.VER_CUR_USER_NEW_PHONE: {
+//                                                                        FirebaseAuth.getInstance().getCurrentUser().delete();
+//                                                                        break;
+//                                                                    }
+//                                                                    case constants.VER_NEW_USER: {
+//                                                                        break;
+//                                                                    }
+//                                                                }
+//                                                                userViewModel.getMsg().postValue(e.getMessage());
+//                                                                Log.d(constants.TAG, e.getMessage());
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onCodeSent(@NonNull @NotNull String id, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+//                                                                super.onCodeSent(id, forceResendingToken);
+//                                                                Bundle bundle = new Bundle();
+//                                                                bundle.putString("id", id);
+//                                                                constants.APP_ACTIVITY.navController.navigate(R.id.action_authFragment2_to_enterPinFragment2, bundle);
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onCodeAutoRetrievalTimeOut(@NonNull @NotNull String s) {
+//                                                                super.onCodeAutoRetrievalTimeOut(s);
+//                                                            }
+//                                                        });
                                             }
                                         }
                                     });

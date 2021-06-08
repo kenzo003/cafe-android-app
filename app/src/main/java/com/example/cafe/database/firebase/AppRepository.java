@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cafe.models.CustomerUser;
+import com.example.cafe.models.News;
 import com.example.cafe.models.User;
 import com.example.cafe.utilits.constants;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,9 +22,12 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +36,9 @@ public class AppRepository {
     private DatabaseReference mReference;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private MutableLiveData<String> msg;
+    private MutableLiveData<List<News>> allNews;
     private FirebaseUser user;
+    private StorageReference storageRef;
 
     public AppRepository() {
         mAuth = FirebaseAuth.getInstance();
@@ -40,9 +46,14 @@ public class AppRepository {
         mReference = FirebaseDatabase.getInstance().getReference();
         userMutableLiveData = new MutableLiveData<>();
         msg = new MutableLiveData<>();
+        allNews = new AllNewsLiveData();
+        storageRef = FirebaseStorage.getInstance().getReference();
 
     }
 
+    public MutableLiveData<List<News>> getAllNews() {
+        return allNews;
+    }
 
     public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
         mAuth.createUserWithEmailAndPassword(email_address, password)
@@ -177,7 +188,22 @@ public class AppRepository {
         userMutableLiveData.postValue(mAuth.getCurrentUser());
     }
 
+
     public MutableLiveData<String> getMsg() {
         return msg;
     }
+
+    public void getImage(String url ){
+        storageRef.child(constants.STORAGE_NODE_NEWS + url).getBytes(1024*1024)
+        .addOnSuccessListener(
+                new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+
+                    }
+                }
+        );
+    }
+
+
 }
