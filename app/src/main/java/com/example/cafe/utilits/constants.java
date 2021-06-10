@@ -41,6 +41,25 @@ public class constants {
     public static final String NODE_NEWS_USERS = "NewsUser";
     public static final String STORAGE_NODE_NEWS = "news/news_photo/";
 
+    //Product
+    public static final String NODE_PRODUCT = "product";
+    public static final String PRODUCT_ID = "product_id";
+    public static final String PRODUCT_NAME = "product_name";
+    public static final String PRODUCT_UNIT = "product_unit";
+    public static final String PRODUCT_DESC = "product_desc";
+    public static final String PRODUCT_PRICE = "product_price";
+    public static final String PRODUCT_CATEGORY_ID = "ProductCategory";
+    public static final String PRODUCT_VISIBILITY = "product_visibility";
+    public static final String PRODUCT_QUANTITY = "quantity";
+
+    //Category
+    public static final String NODE_CATEGORY = "product";
+    public static final String CATEGORY_ID = "category_id";
+    public static final String CATEGORY_NAME = "category_name";
+
+
+
+
 
     public static void initFireBase() {
         AUTH = FirebaseAuth.getInstance();

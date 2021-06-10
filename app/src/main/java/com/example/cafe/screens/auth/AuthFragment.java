@@ -80,7 +80,7 @@ public class AuthFragment extends Fragment {
 //                                                    return;
 //                                                }
 
-                                                //TODO вернуть, для включения верикфикации смс
+//                                                //TODO вернуть, для включения верикфикации смс
 //                                                userViewModel.verificationSMS(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(),
 //                                                        constants.VER_CUR_USER, getActivity(),
 //                                                        new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
