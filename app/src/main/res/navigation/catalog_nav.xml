@@ -3,11 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/catalog_nav"
-    app:startDestination="@id/catalogFragment2">
+    app:startDestination="@id/categoryFragment">
 
     <fragment
         android:id="@+id/catalogFragment2"
         android:name="com.example.cafe.screens.catalog.CatalogFragment"
+        android:label="Товары"
+        tools:layout="@layout/category_fragment" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.cafe.screens.catalog.CategoryFragment"
         android:label="Каталог"
-        tools:layout="@layout/catalog_fragment" />
+        tools:layout="@layout/category_fragment">
+        <action
+            android:id="@+id/action_categoryFragment_to_catalogFragment2"
+            app:destination="@id/catalogFragment2" />
+    </fragment>
 </navigation>

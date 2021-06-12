@@ -15,49 +15,48 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cafe.R;
-import com.example.cafe.models.Category;
+import com.example.cafe.models.Product;
 import com.example.cafe.utilits.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder> {
 
-    private List<Category> categories;
+
+    private List<Product> products;
     private OnItemClickListener OnItemClickListener;
     private Context context;
 
 
-    public CategoryAdapter(List<Category> categories, Context context) {
-        this.categories = categories;
+    public CatalogAdapter(List<Product> products, Context context) {
+        this.products = products;
         this.context = context;
-
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setCatalog(List<Product> products) {
+        this.products = products;
         notifyDataSetChanged();
     }
 
-    public Category getCategory(int position){
-        return categories.get(position);
+    public Product getProduct(int position){
+        return products.get(position);
     }
 
     @NonNull
     @NotNull
     @Override
-    public CategoryViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
-        return new CategoryViewHolder(view);
+    public CatalogAdapter.CatalogViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.catalog_item, parent, false);
+        return new CatalogAdapter.CatalogViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull CategoryAdapter.CategoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull CatalogAdapter.CatalogViewHolder holder, int position) {
 
-        holder.bind(categories.get(position));
-        Category model = categories.get(position);
-        holder.itemView.setTag(categories);
+        holder.bind(products.get(position));
+        Product model = products.get(position);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.centerCrop();
@@ -66,7 +65,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(model.logo_id)
+                .load(model.product_name)
                 .apply(requestOptions)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.logo);
@@ -75,27 +74,27 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return products.size();
     }
-    public void setOnCategoryClickListener(OnItemClickListener onCategoryClickListener) {
-        this.OnItemClickListener = onCategoryClickListener;
+    public void setOnCatalogClickListener(CatalogAdapter.OnItemClickListener onCatalogClickListener) {
+        this.OnItemClickListener = onCatalogClickListener;
     }
 
-    final class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    final class CatalogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         //        private OnItemClickListener onItemClickListener;
         private final ImageView logo;
         private final TextView name;
 
 
-        public CategoryViewHolder(@NonNull @NotNull View itemView) {
+        public CatalogViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            logo = (ImageView) itemView.findViewById(R.id.ci_img_v_logo);
-            name = (TextView) itemView.findViewById(R.id.ci_txt_v_category_name);
+            logo = (ImageView) itemView.findViewById(R.id.ci_img_v_product_logo);
+            name = (TextView) itemView.findViewById(R.id.ci_txt_v_product_name);
             itemView.setOnClickListener(this);
         }
 
-        private void bind(Category category){
-            name.setText(category.name);
+        private void bind(Product product){
+            name.setText(product.product_name);
         }
 
         @Override
@@ -104,7 +103,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
     }
 
+
     interface OnItemClickListener {
         void onNewsClick(View view, int position);
     }
+
 }

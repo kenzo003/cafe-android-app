@@ -61,15 +61,14 @@ public class NewsFragment extends Fragment {
         adapter.setOnNewsClickListener(new NewsAdapter.OnItemClickListener() {
             @Override
             public void onNewsClick(View view, int position) {
-                Toast.makeText(getContext(), adapter.getNews(position).header_text, Toast.LENGTH_LONG);
+                Toast.makeText(getContext(), adapter.getNews(position).news_title, Toast.LENGTH_LONG).show();
             }
         });
 
         observerNews = new Observer<List<News>>() {
             @Override
             public void onChanged(List<News> news) {
-                adapter.setNews(news);
-            }
+                adapter.setNews(news);            }
         };
 
         mViewModel.getAllNews().observe(this, observerNews);

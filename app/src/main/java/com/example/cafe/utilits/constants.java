@@ -7,6 +7,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class constants {
+    //CuRRent
+    public static String CURRENT_CATEGORY_ID = "";
     public static final String ID_CUSTOMER = "zYIxy03gxtajuqUKtnmUidQOJ0A2";
     public static final String TAG = "cafe_test";
     public static MainActivity APP_ACTIVITY;
@@ -34,10 +36,10 @@ public class constants {
     //News
     public static final String NODE_NEWS = "news";
     public static final String NEWS_ID = "news_id";
-    public static final String NEWS_HEADER = "header_text";
-    public static final String NEWS_DATA = "data";
-    public static final String NEWS_MEDIA = "media_id";
-    public static final String NEWS_DESC = "description";
+    public static final String NEWS_HEADER = "news_title";
+    public static final String NEWS_DATA = "news_data";
+    public static final String NEWS_MEDIA = "news_img_url";
+    public static final String NEWS_DESC = "news_desc";
     public static final String NODE_NEWS_USERS = "NewsUser";
     public static final String STORAGE_NODE_NEWS = "news/news_photo/";
 
@@ -48,14 +50,14 @@ public class constants {
     public static final String PRODUCT_UNIT = "product_unit";
     public static final String PRODUCT_DESC = "product_desc";
     public static final String PRODUCT_PRICE = "product_price";
-    public static final String PRODUCT_CATEGORY_ID = "ProductCategory";
     public static final String PRODUCT_VISIBILITY = "product_visibility";
-    public static final String PRODUCT_QUANTITY = "quantity";
+    public static final String PRODUCT_QUANTITY = "product_quantity";
 
     //Category
-    public static final String NODE_CATEGORY = "product";
+    public static final String NODE_CATEGORY = "category";
     public static final String CATEGORY_ID = "category_id";
     public static final String CATEGORY_NAME = "category_name";
+    public static final String CATEGORY_LOGO = "category_logo";
 
 
 

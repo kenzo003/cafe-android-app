@@ -72,7 +72,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(model.media_id)
+                .load(model.news_img_url)
                 .apply(requestOptions)
                 .addListener(
                         new RequestListener<Drawable>() {
@@ -116,17 +116,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             header = (TextView) itemView.findViewById(R.id.ni_txt_V_title);
             description = (TextView) itemView.findViewById((R.id.ni_txt_v_desc));
             media = (ImageView) itemView.findViewById(R.id.ni_img_v_placeholder);
-            data = (TextView)itemView.findViewById(R.id.ni_txt_v_pubDate);
+            data = (TextView) itemView.findViewById(R.id.ni_txt_v_pubDate);
             progress_bar = (ProgressBar) itemView.findViewById(R.id.ni_prg_bar);
+
+            itemView.setOnClickListener(this);
 
             this.onItemClickListener = onItemClickListener;
         }
 
         public void bind(News news) {
-            header.setText(news.header_text);
-            description.setText(news.description);
-            data.setText(news.date);
-
+            header.setText(news.news_title);
+            description.setText(news.news_desc);
+            data.setText(news.news_date);
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 //            media.setImageURI(news.media_id);
         }

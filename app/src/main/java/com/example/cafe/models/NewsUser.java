@@ -10,4 +10,7 @@ public class NewsUser {
         this.user_id = user_id;
         this.visible = visible;
     }
+
+    public NewsUser() {
+    }
 }

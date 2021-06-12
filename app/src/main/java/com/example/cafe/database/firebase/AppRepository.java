@@ -6,8 +6,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.cafe.models.Category;
 import com.example.cafe.models.CustomerUser;
 import com.example.cafe.models.News;
+import com.example.cafe.models.Product;
 import com.example.cafe.models.User;
 import com.example.cafe.utilits.constants;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +40,8 @@ public class AppRepository {
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private MutableLiveData<String> msg;
     private MutableLiveData<List<News>> allNews;
+    private MutableLiveData<List<Category>> allCategory;
+    private MutableLiveData<List<Product>> allProduct;
     private FirebaseUser user;
     private StorageReference storageRef;
 
@@ -47,12 +52,45 @@ public class AppRepository {
         userMutableLiveData = new MutableLiveData<>();
         msg = new MutableLiveData<>();
         allNews = new AllNewsLiveData();
+        allCategory = new AllCategoryLiveData();
+        allProduct = new AllProductLiveData();
         storageRef = FirebaseStorage.getInstance().getReference();
-
     }
 
     public MutableLiveData<List<News>> getAllNews() {
         return allNews;
+    }
+
+    public MutableLiveData<List<Category>> getAllCategory() {
+        return allCategory;
+    }
+
+    public MutableLiveData<List<Product>> getAllProduct() {
+        return allProduct;
+    }
+
+    public void insertProduct(Product product) {
+        String idProduct = mReference.push().getKey().toString();
+        HashMap<String, Object> mapProduct = new HashMap<>();
+        mapProduct.put(constants.PRODUCT_ID, idProduct);
+        mapProduct.put(constants.PRODUCT_NAME, product.product_name);
+        mapProduct.put(constants.PRODUCT_UNIT, product.product_unit);
+        mapProduct.put(constants.PRODUCT_DESC, product.product_description);
+        mapProduct.put(constants.PRODUCT_PRICE, product.product_price);
+        mapProduct.put(constants.PRODUCT_QUANTITY, product.product_quantity);
+        mapProduct.put(constants.PRODUCT_VISIBILITY, product.product_visibility);
+        mapProduct.put(constants.CATEGORY_ID, product.category_id);
+
+        mReference.child(constants.NODE_PRODUCT).child(idProduct)
+                .updateChildren(mapProduct)
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                Log.d(constants.TAG, e.getMessage());
+                            }
+                        }
+                );
     }
 
     public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
@@ -183,6 +221,9 @@ public class AppRepository {
                 });
     }
 
+    public void insertNews(News news){
+
+    }
     public void signOut() {
         mAuth.signOut();
         userMutableLiveData.postValue(mAuth.getCurrentUser());
@@ -193,16 +234,21 @@ public class AppRepository {
         return msg;
     }
 
-    public void getImage(String url ){
-        storageRef.child(constants.STORAGE_NODE_NEWS + url).getBytes(1024*1024)
-        .addOnSuccessListener(
-                new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
+    public void getImage(String url) {
+        storageRef.child(constants.STORAGE_NODE_NEWS + url).getBytes(1024 * 1024)
+                .addOnSuccessListener(
+                        new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
 
-                    }
-                }
-        );
+                            }
+                        }
+                );
+    }
+
+    public void getProduct(String productId) {
+
+
     }
 
 
