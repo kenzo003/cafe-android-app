@@ -18,6 +18,7 @@ import com.example.cafe.R;
 import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.NewsFragmentBinding;
 import com.example.cafe.models.News;
+import com.example.cafe.utilits.constants;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.LinkedList;
@@ -61,6 +62,9 @@ public class NewsFragment extends Fragment {
         adapter.setOnNewsClickListener(new NewsAdapter.OnItemClickListener() {
             @Override
             public void onNewsClick(View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(constants.NODE_NEWS, adapter.getNews(position));
+                ((MainActivity)getActivity()).navController.navigate(R.id.action_newsFragment2_to_newsCardFragment, bundle);
                 Toast.makeText(getContext(), adapter.getNews(position).news_title, Toast.LENGTH_LONG).show();
             }
         });
@@ -87,6 +91,11 @@ public class NewsFragment extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        observerNews = null;
+    }
 
     @Override
     public void onDestroy() {

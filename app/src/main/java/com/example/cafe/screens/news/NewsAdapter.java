@@ -51,7 +51,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     public News getNews(int position) {
-        return this.news.get(position);
+        return News.cloneNews(this.news.get(position));
     }
 
     public void delNews(int position){

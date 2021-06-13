@@ -10,5 +10,13 @@
         android:id="@+id/newsFragment2"
         android:name="com.example.cafe.screens.news.NewsFragment"
         android:label="Новости"
-        tools:layout="Новости" />
+        tools:layout="Новости" >
+        <action
+            android:id="@+id/action_newsFragment2_to_newsCardFragment"
+            app:destination="@id/newsCardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsCardFragment"
+        android:name="com.example.cafe.screens.news.NewsCardFragment"
+        tools:layout="@layout/fragment_news_card" />
 </navigation>

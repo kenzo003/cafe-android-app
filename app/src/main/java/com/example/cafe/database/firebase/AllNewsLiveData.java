@@ -1,11 +1,9 @@
 package com.example.cafe.database.firebase;
 
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cafe.models.News;
@@ -24,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class AllNewsLiveData extends MutableLiveData<List<News>> {
     private FirebaseAuth mAuth;
@@ -42,24 +41,23 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
 
 
     ChildEventListener childEventListener = new ChildEventListener() {
-        LinkedList<News> news = new LinkedList<>();
         int finalCount_news = 0;
+        LinkedList<News> news = new LinkedList<>();
 
 
         @Override
         public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+            finalCount_news += 1;
+            news.clear();
             try {
                 if (snapshot.exists()) {
-                    String newsId = snapshot.getValue(NewsUser.class).news_id;
-                    finalCount_news += 1;
-
+                    String newsId = Objects.requireNonNull(snapshot.getValue(NewsUser.class)).news_id;
                     mReference.child(constants.NODE_NEWS).child(newsId).addValueEventListener(
                             new ValueEventListener() {
-                                @RequiresApi(api = Build.VERSION_CODES.N)
                                 @Override
                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                     if (snapshot != null && snapshot.getValue(News.class) != null) {
-                                        if (news.size() == finalCount_news)
+                                        if (news.size() >= finalCount_news)
                                             for (int i = 0; i < news.size(); i++) {
                                                 if (news.get(i).news_id.equals(snapshot.getKey())) {
                                                     news.set(i, snapshot.getValue(News.class));
@@ -117,4 +115,5 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
         super.onInactive();
         mNewsUser.removeEventListener(childEventListener);
     }
+
 }
