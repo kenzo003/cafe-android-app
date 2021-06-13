@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.cafe.database.firebase.AppRepository;
 import com.example.cafe.models.News;
+import com.google.android.gms.tasks.OnCompleteListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,8 +28,8 @@ public class NewsViewModel extends AndroidViewModel {
         return allNews;
     }
 
-    public void deleteNews(News news){
-        repository.deleteNews(news);
+    public void deleteNews(News news, OnCompleteListener<Void> onCompleteListener){
+        repository.deleteNews(news, onCompleteListener);
     }
 
 

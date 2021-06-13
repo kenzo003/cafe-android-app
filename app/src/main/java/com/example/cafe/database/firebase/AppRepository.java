@@ -12,11 +12,7 @@ import com.example.cafe.models.News;
 import com.example.cafe.models.NewsUser;
 import com.example.cafe.models.Product;
 import com.example.cafe.models.User;
-import com.example.cafe.utilits.constants;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,8 +31,26 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static com.example.cafe.utilits.constants.CATEGORY_ID;
+import static com.example.cafe.utilits.constants.NODE_NEWS_USERS;
+import static com.example.cafe.utilits.constants.NODE_PRODUCT;
+import static com.example.cafe.utilits.constants.PRODUCT_DESC;
+import static com.example.cafe.utilits.constants.PRODUCT_ID;
+import static com.example.cafe.utilits.constants.PRODUCT_NAME;
+import static com.example.cafe.utilits.constants.PRODUCT_PRICE;
+import static com.example.cafe.utilits.constants.PRODUCT_QUANTITY;
+import static com.example.cafe.utilits.constants.PRODUCT_UNIT;
+import static com.example.cafe.utilits.constants.PRODUCT_VISIBILITY;
+import static com.example.cafe.utilits.constants.STORAGE_NODE_NEWS;
+import static com.example.cafe.utilits.constants.TAG;
+import static com.example.cafe.utilits.constants.USER_ID;
+import static com.example.cafe.utilits.constants.VER_CUR_USER;
+import static com.example.cafe.utilits.constants.VER_CUR_USER_NEW_PHONE;
+import static com.example.cafe.utilits.constants.VER_NEW_USER;
 
 public class AppRepository {
     private FirebaseAuth mAuth;
@@ -74,26 +88,22 @@ public class AppRepository {
     }
 
     public void insertProduct(Product product) {
-        String idProduct = mReference.push().getKey().toString();
+        String idProduct = mReference.push().getKey();
         HashMap<String, Object> mapProduct = new HashMap<>();
-        mapProduct.put(constants.PRODUCT_ID, idProduct);
-        mapProduct.put(constants.PRODUCT_NAME, product.product_name);
-        mapProduct.put(constants.PRODUCT_UNIT, product.product_unit);
-        mapProduct.put(constants.PRODUCT_DESC, product.product_description);
-        mapProduct.put(constants.PRODUCT_PRICE, product.product_price);
-        mapProduct.put(constants.PRODUCT_QUANTITY, product.product_quantity);
-        mapProduct.put(constants.PRODUCT_VISIBILITY, product.product_visibility);
-        mapProduct.put(constants.CATEGORY_ID, product.category_id);
+        mapProduct.put(PRODUCT_ID, idProduct);
+        mapProduct.put(PRODUCT_NAME, product.product_name);
+        mapProduct.put(PRODUCT_UNIT, product.product_unit);
+        mapProduct.put(PRODUCT_DESC, product.product_description);
+        mapProduct.put(PRODUCT_PRICE, product.product_price);
+        mapProduct.put(PRODUCT_QUANTITY, product.product_quantity);
+        mapProduct.put(PRODUCT_VISIBILITY, product.product_visibility);
+        mapProduct.put(CATEGORY_ID, product.category_id);
 
-        mReference.child(constants.NODE_PRODUCT).child(idProduct)
+        assert idProduct != null;
+        mReference.child(NODE_PRODUCT).child(idProduct)
                 .updateChildren(mapProduct)
                 .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull @NotNull Exception e) {
-                                Log.d(constants.TAG, e.getMessage());
-                            }
-                        }
+                        e -> Log.d(TAG, e.getMessage())
                 );
     }
 
@@ -101,20 +111,12 @@ public class AppRepository {
         mAuth.createUserWithEmailAndPassword(email_address, password)
                 .addOnCompleteListener((OnCompleteListener<AuthResult>) onComplete)
                 .addOnSuccessListener(
-                        new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-                                insertUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id);
-                            }
-                        }
+                        authResult -> insertUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id)
                 )
                 .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull @NotNull Exception e) {
-                                Log.d(constants.TAG, e.getMessage());
-                                msg.postValue(e.getMessage());
-                            }
+                        e -> {
+                            Log.d(TAG, e.getMessage());
+                            msg.postValue(e.getMessage());
                         }
                 );
     }
@@ -123,43 +125,34 @@ public class AppRepository {
         mAuth.signInWithEmailAndPassword(email_address, password)
                 .addOnCompleteListener(onComplete)
                 .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull @NotNull Exception e) {
-                                Log.d(constants.TAG, e.getMessage());
-                                msg.postValue(e.getMessage());
-                            }
+                        e -> {
+                            Log.d(TAG, e.getMessage());
+                            msg.postValue(e.getMessage());
                         }
                 );
     }
 
     public void updatePhoneNumber(String id, String smsCode, String typeRequest, OnCompleteListener<Void> onComplete) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(id, smsCode);
-        mAuth.getCurrentUser().updatePhoneNumber(credential)
+        Objects.requireNonNull(mAuth.getCurrentUser()).updatePhoneNumber(credential)
                 .addOnCompleteListener(onComplete)
                 .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull @NotNull Exception e) {
-//                                if (mAuth.getCurrentUser().getPhoneNumber() == null) {
-//                                    mAuth.getCurrentUser().delete();
-//                                }
-                                switch (typeRequest) {
-                                    case constants.VER_CUR_USER: {
-                                        mAuth.signOut();
-                                        break;
-                                    }
-                                    case constants.VER_CUR_USER_NEW_PHONE: {
-                                        mAuth.getCurrentUser().delete();
-                                        break;
-                                    }
-                                    case constants.VER_NEW_USER: {
-                                        break;
-                                    }
+                        e -> {
+                            switch (typeRequest) {
+                                case VER_CUR_USER: {
+                                    mAuth.signOut();
+                                    break;
                                 }
-                                Log.d(constants.TAG, e.getMessage());
-                                msg.postValue(e.getMessage());
+                                case VER_CUR_USER_NEW_PHONE: {
+                                    mAuth.getCurrentUser().delete();
+                                    break;
+                                }
+                                case VER_NEW_USER: {
+                                    break;
+                                }
                             }
+                            Log.d(TAG, e.getMessage());
+                            msg.postValue(e.getMessage());
                         }
                 );
     }
@@ -178,15 +171,12 @@ public class AppRepository {
     public void signInWithCredential(String id, String smsCode) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(id, smsCode);
         mAuth.signInWithCredential(credential).addOnCompleteListener(
-                new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            userMutableLiveData.postValue(task.getResult().getUser());
-                        } else {
-                            Log.d(constants.TAG, task.getException().getMessage());
-                            msg.postValue(task.getException().getMessage());
-                        }
+                task -> {
+                    if (task.isSuccessful()) {
+                        userMutableLiveData.postValue(Objects.requireNonNull(task.getResult()).getUser());
+                    } else {
+                        Log.d(TAG, Objects.requireNonNull(task.getException()).getMessage());
+                        msg.postValue(task.getException().getMessage());
                     }
                 }
         );
@@ -199,29 +189,18 @@ public class AppRepository {
     public void insertUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id) {
         User user = new User(name, surname, email_address, phone_number, city, gender, birth_date, address);
 
-        mReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
+        mReference.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(user)
                 .addOnSuccessListener(
-                        new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                if (mAuth.getCurrentUser().getUid() != null) {
-                                    String id = mAuth.getCurrentUser().getUid() + customer_id;
-                                    id = UUID.randomUUID().toString();
-                                    mReference.child("CustomerUser").child(id).setValue(new CustomerUser(customer_id, mAuth.getCurrentUser().getUid()));
-                                    Log.d(constants.TAG, "Update data success");
-                                } else {
-                                    return;
-                                }
-
-                            }
+                        unused -> {
+                            mAuth.getCurrentUser().getUid();
+                            String id = UUID.randomUUID().toString();
+                            mReference.child("CustomerUser").child(id).setValue(new CustomerUser(customer_id, mAuth.getCurrentUser().getUid()));
+                            Log.d(TAG, "Update data success");
                         }
                 )
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull @NotNull Exception e) {
-                        Log.d(constants.TAG, e.getMessage());
-                        msg.postValue(e.getMessage());
-                    }
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, e.getMessage());
+                    msg.postValue(e.getMessage());
                 });
     }
 
@@ -236,21 +215,20 @@ public class AppRepository {
 
 
     public MutableLiveData<String> getMsg() {
-        return msg;
+        return this.msg;
     }
 
-    public void deleteNews(News news) {
-        mReference.child(constants.NODE_NEWS_USERS)
-                .orderByChild(constants.USER_ID).equalTo(mAuth.getCurrentUser().getUid())
+    public void deleteNews(News news, OnCompleteListener<Void> OnComplete) {
+        mReference.child(NODE_NEWS_USERS)
+                .orderByChild(USER_ID).equalTo(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                 .addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                for (DataSnapshot dataSnapshot:snapshot.getChildren()) {
-                                    if (dataSnapshot.getValue(NewsUser.class).news_id.equals(news.news_id))
-                                    dataSnapshot.getRef().removeValue();
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    if (Objects.requireNonNull(dataSnapshot.getValue(NewsUser.class)).news_id.equals(news.news_id))
+                                        dataSnapshot.getRef().removeValue().addOnCompleteListener((OnCompleteListener<Void>) OnComplete);
                                 }
-//                                snapshot.getRef().removeValue();
                             }
 
                             @Override
@@ -262,21 +240,11 @@ public class AppRepository {
     }
 
     public void getImage(String url) {
-        storageRef.child(constants.STORAGE_NODE_NEWS + url).getBytes(1024 * 1024)
+        storageRef.child(STORAGE_NODE_NEWS + url).getBytes(1024 * 1024)
                 .addOnSuccessListener(
-                        new OnSuccessListener<byte[]>() {
-                            @Override
-                            public void onSuccess(byte[] bytes) {
+                        bytes -> {
 
-                            }
                         }
                 );
     }
-
-    public void getProduct(String productId) {
-
-
-    }
-
-
 }

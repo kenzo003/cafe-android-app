@@ -18,5 +18,9 @@
     <fragment
         android:id="@+id/newsCardFragment"
         android:name="com.example.cafe.screens.news.NewsCardFragment"
-        tools:layout="@layout/fragment_news_card" />
+        tools:layout="@layout/fragment_news_card" >
+        <action
+            android:id="@+id/action_newsCardFragment_to_newsFragment2"
+            app:destination="@id/newsFragment2" />
+    </fragment>
 </navigation>

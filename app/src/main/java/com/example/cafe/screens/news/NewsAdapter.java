@@ -1,7 +1,9 @@
 package com.example.cafe.screens.news;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.cafe.R;
 import com.example.cafe.models.News;
 import com.example.cafe.utilits.Utils;
+import com.example.cafe.utilits.constants;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -54,9 +57,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return News.cloneNews(this.news.get(position));
     }
 
-    public void delNews(int position){
-        this.news.remove(position);
-        notifyDataSetChanged();
+    public void delNews(int position) {
+        try {
+            news.remove(position);
+            notifyDataSetChanged();
+        }
+        catch (Exception e){
+            Log.d(constants.TAG, e.getMessage());
+        }
     }
 
     @NonNull
@@ -67,6 +75,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return new NewsViewHolder(view);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(@NonNull @NotNull NewsAdapter.NewsViewHolder holder, int position) {
         holder.bind(news.get(position));
@@ -124,7 +133,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         public NewsViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            delete = (Button)itemView.findViewById(R.id.ni_btn_news_del);
+            delete = (Button) itemView.findViewById(R.id.ni_btn_news_del);
             header = (TextView) itemView.findViewById(R.id.ni_txt_V_title);
             description = (TextView) itemView.findViewById((R.id.ni_txt_v_desc));
             media = (ImageView) itemView.findViewById(R.id.ni_img_v_placeholder);
@@ -143,7 +152,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         }
 
-        private void onDelClick(View view){
+        private void onDelClick(View view) {
             OnNewsDeleteClickListener.onNewsClick(view, getAbsoluteAdapterPosition());
         }
 

@@ -1,6 +1,7 @@
 package com.example.cafe.screens.news;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +33,14 @@ public class NewsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private NewsAdapter adapter;
     private Observer<List<News>> observerNews;
+    private MainActivity activity;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
+        activity = (MainActivity) getActivity();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            ((MainActivity) getActivity()).navController.navigate(R.id.auth_nav);
+            activity.navController.navigate(R.id.auth_nav);
         }
         mBinding = NewsFragmentBinding.inflate(inflater);
         return mBinding.getRoot();
@@ -50,6 +52,7 @@ public class NewsFragment extends Fragment {
         init();
     }
 
+
     private void init() {
         mViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         adapter = new NewsAdapter(new LinkedList<>(), getContext());
@@ -59,43 +62,30 @@ public class NewsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        adapter.setOnNewsClickListener(new NewsAdapter.OnItemClickListener() {
-            @Override
-            public void onNewsClick(View view, int position) {
+        adapter.setOnNewsClickListener((view, position) -> {
+            try {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(constants.NODE_NEWS, adapter.getNews(position));
-                ((MainActivity)getActivity()).navController.navigate(R.id.action_newsFragment2_to_newsCardFragment, bundle);
+                activity.navController.navigate(R.id.action_newsFragment2_to_newsCardFragment, bundle);
                 Toast.makeText(getContext(), adapter.getNews(position).news_title, Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Log.d(constants.TAG, e.getMessage());
             }
         });
 
         adapter.setOnNewsDeleteClickListener(
-                new NewsAdapter.OnItemClickListener() {
-                    @Override
-                    public void onNewsClick(View view, int position) {
-                        mViewModel.deleteNews(adapter.getNews(position));
+                (view, position) -> {
+                    mViewModel.deleteNews(adapter.getNews(position), null);
+                    if (position == 0)
                         adapter.delNews(position);
-                    }
                 }
         );
 
 
-        observerNews = new Observer<List<News>>() {
-            @Override
-            public void onChanged(List<News> news) {
-                adapter.setNews(news);
-            }
-        };
-
+        observerNews = news -> adapter.setNews(news);
         mViewModel.getAllNews().observe(this, observerNews);
-
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        observerNews = null;
-    }
 
     @Override
     public void onDestroy() {

@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -29,54 +30,36 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
     private DatabaseReference mReference;
     private FirebaseDatabase mInstance;
     private Query mNewsUser;
+    private LinkedList<News> news;
+    private HashMap<DatabaseReference, ChildEventListener> listenerHashMap;
 
 
     public AllNewsLiveData() {
+        news = new LinkedList<>();
         mAuth = FirebaseAuth.getInstance();
         mReference = FirebaseDatabase.getInstance().getReference();
         mNewsUser = mReference.child(constants.NODE_NEWS_USERS)
-                .orderByChild(constants.USER_ID).equalTo(mAuth.getCurrentUser().getUid());
+                .orderByChild(constants.USER_ID)
+                .equalTo(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
         mInstance = FirebaseDatabase.getInstance();
     }
 
 
-    ChildEventListener childEventListener = new ChildEventListener() {
-        int finalCount_news = 0;
-        LinkedList<News> news = new LinkedList<>();
 
-
+    ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
-        public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-            finalCount_news += 1;
+        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
             news.clear();
             try {
                 if (snapshot.exists()) {
-                    String newsId = Objects.requireNonNull(snapshot.getValue(NewsUser.class)).news_id;
-                    mReference.child(constants.NODE_NEWS).child(newsId).addValueEventListener(
-                            new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    if (snapshot != null && snapshot.getValue(News.class) != null) {
-                                        if (news.size() >= finalCount_news)
-                                            for (int i = 0; i < news.size(); i++) {
-                                                if (news.get(i).news_id.equals(snapshot.getKey())) {
-                                                    news.set(i, snapshot.getValue(News.class));
-                                                    break;
-                                                }
-                                            }
-                                        else {
-                                            news.add(snapshot.getValue(News.class));
-                                        }
-                                        postValue(news);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                    Log.d(constants.TAG, error.getMessage());
-                                }
-                            }
-                    );
+                    for (DataSnapshot news_user : snapshot.getChildren()) {
+                        if (news_user.exists() && news_user.getValue() != null) {
+                            String newsId = Objects.requireNonNullElse(Objects.requireNonNull(news_user.getValue(NewsUser.class)).news_id, "");
+                            mReference.child(constants.NODE_NEWS).orderByChild(constants.NEWS_ID).equalTo(newsId).addChildEventListener(
+                                    childEventListener
+                            );
+                        }
+                    }
                 }
             } catch (Exception exception) {
                 Log.d(constants.TAG, exception.getMessage());
@@ -84,11 +67,35 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
         }
 
         @Override
+        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            Log.d(constants.TAG, error.getMessage());
+        }
+    };
+
+    private ChildEventListener childEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+            if (snapshot.exists() && snapshot.getValue() != null) {
+                news.add(snapshot.getValue(News.class));
+                postValue(news);
+            }
+        }
+
+        @Override
         public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+            if (snapshot.exists() && snapshot.getValue() != null) {
+                int index = indexOf(news, snapshot.getKey());
+                news.set(index, snapshot.getValue(News.class));
+                postValue(news);
+            }
         }
 
         @Override
         public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+            if (snapshot.exists() && snapshot.getValue() != null) {
+                news.remove(snapshot.getValue(News.class));
+                postValue(news);
+            }
         }
 
         @Override
@@ -100,20 +107,31 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
         public void onCancelled(@NonNull @NotNull DatabaseError error) {
             Log.d(constants.TAG, error.getMessage());
         }
-
     };
 
+    //получение индекса элемента по news_id
+    private int indexOf(List<News> list, String id) {
+        int index = -1;
+        for (News value : list) {
+            index++;
+            if (value.news_id.equals(id))
+                break;
+        }
+        return index;
+    }
 
     @Override
     protected void onActive() {
         super.onActive();
-        mNewsUser.addChildEventListener(childEventListener);
+        mNewsUser.addValueEventListener(valueEventListener);
     }
 
     @Override
     protected void onInactive() {
+        news.clear();
         super.onInactive();
-        mNewsUser.removeEventListener(childEventListener);
+        mReference.child(constants.NODE_NEWS).removeEventListener(childEventListener);
+        mNewsUser.removeEventListener(valueEventListener);
     }
 
 }

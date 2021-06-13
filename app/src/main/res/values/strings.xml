@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Cafe</string>
-    <string name="please_enter_passcode">Enter a passcode of 4-6 digits</string>
+    <string name="please_enter_passcode">Enter a passcode of 4–6 digits</string>
     <string name="lock_input_again">Re-enter new passcode</string>
     <string name="lock_input_not_match">Passcodes do not match.</string>
     <string name="btnHome">Главная</string>
@@ -28,4 +28,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="category_name">Название категории</string>
+    <string name="delete">Удалить</string>
+    <string name="todo">TODO</string>
 </resources>

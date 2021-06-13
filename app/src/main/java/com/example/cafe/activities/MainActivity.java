@@ -1,15 +1,14 @@
 package com.example.cafe.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -19,7 +18,7 @@ import com.example.cafe.screens.auth.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,10 +48,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void init() {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         NavHostFragment hostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        navController = hostFragment.getNavController();
+        navController = Objects.requireNonNull(hostFragment).getNavController();
         mToolbar = mBinding.toolbar;
         mBottomNavigation = mBinding.bottomNavigationView;
 
@@ -61,31 +61,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(mToolbar, navController);
 //        setSupportActionBar(mToolbar);
 
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NotNull NavController navController, @NotNull NavDestination navDestination, @org.jetbrains.annotations.Nullable Bundle bundle) {
-                switch (navDestination.getId()) {
-                    case R.id.authFragment2:
-                    case R.id.enterPinFragment2:
-                    case R.id.loginFragment: {
-                        showToolbarAndNavBar();
-                        break;
-                    }
-                    default:
-                        mToolbar.setVisibility(View.VISIBLE);
-                        mBottomNavigation.setVisibility(View.VISIBLE);
-                        break;
+        navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
+            switch (navDestination.getId()) {
+                case R.id.authFragment2:
+                case R.id.enterPinFragment2:
+                case R.id.loginFragment: {
+                    showToolbarAndNavBar();
+                    break;
                 }
-
+                default:
+                    mToolbar.setVisibility(View.VISIBLE);
+                    mBottomNavigation.setVisibility(View.VISIBLE);
+                    break;
             }
         });
 
-        userViewModel.getMsg().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                Snackbar.make(mBinding.getRoot(), s, Snackbar.LENGTH_LONG).show();
-            }
-        });
+        userViewModel.getMsg().observe(this, s -> Snackbar.make(mBinding.getRoot(), s, Snackbar.LENGTH_LONG).show());
     }
 
     public UserViewModel getUserViewModel() {
