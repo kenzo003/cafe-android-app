@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     private List<News> news;
     private OnItemClickListener OnNewsClickListener;
+    private OnItemClickListener OnNewsDeleteClickListener;
     private Context context;
 
     public void setNews(List<News> news) {
@@ -52,12 +54,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return this.news.get(position);
     }
 
+    public void delNews(int position){
+        this.news.remove(position);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @NotNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
-        return new NewsViewHolder(view, OnNewsClickListener);
+        return new NewsViewHolder(view);
     }
 
     @Override
@@ -102,26 +109,31 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         this.OnNewsClickListener = onNewsClickListener;
     }
 
+    public void setOnNewsDeleteClickListener(OnItemClickListener OnNewsDeleteClickListener) {
+        this.OnNewsDeleteClickListener = OnNewsDeleteClickListener;
+    }
+
     final class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private final Button delete;
         private final TextView header;
         private final TextView description;
         private final ImageView media;
         private final TextView data;
         private final ProgressBar progress_bar;
-        private OnItemClickListener onItemClickListener;
 
-        public NewsViewHolder(@NonNull @NotNull View itemView, OnItemClickListener onItemClickListener) {
+        public NewsViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            delete = (Button)itemView.findViewById(R.id.ni_btn_news_del);
             header = (TextView) itemView.findViewById(R.id.ni_txt_V_title);
             description = (TextView) itemView.findViewById((R.id.ni_txt_v_desc));
             media = (ImageView) itemView.findViewById(R.id.ni_img_v_placeholder);
             data = (TextView) itemView.findViewById(R.id.ni_txt_v_pubDate);
             progress_bar = (ProgressBar) itemView.findViewById(R.id.ni_prg_bar);
 
-            itemView.setOnClickListener(this);
 
-            this.onItemClickListener = onItemClickListener;
+            delete.setOnClickListener(this::onDelClick);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(News news) {
@@ -129,12 +141,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             description.setText(news.news_desc);
             data.setText(news.news_date);
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-//            media.setImageURI(news.media_id);
+        }
+
+        private void onDelClick(View view){
+            OnNewsDeleteClickListener.onNewsClick(view, getAbsoluteAdapterPosition());
         }
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.onNewsClick(v, getAbsoluteAdapterPosition());
+            OnNewsClickListener.onNewsClick(v, getAbsoluteAdapterPosition());
         }
     }
 

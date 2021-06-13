@@ -45,19 +45,20 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
         LinkedList<News> news = new LinkedList<>();
         int finalCount_news = 0;
 
+
         @Override
         public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-            if (snapshot.exists()) {
-                String newsId = snapshot.getValue(NewsUser.class).news_id;
-                finalCount_news += 1;
+            try {
+                if (snapshot.exists()) {
+                    String newsId = snapshot.getValue(NewsUser.class).news_id;
+                    finalCount_news += 1;
 
-                mReference.child(constants.NODE_NEWS).child(newsId).addValueEventListener(
-                        new ValueEventListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.N)
-                            @Override
-                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                try {
-                                    if (snapshot != null) {
+                    mReference.child(constants.NODE_NEWS).child(newsId).addValueEventListener(
+                            new ValueEventListener() {
+                                @RequiresApi(api = Build.VERSION_CODES.N)
+                                @Override
+                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                    if (snapshot != null && snapshot.getValue(News.class) != null) {
                                         if (news.size() == finalCount_news)
                                             for (int i = 0; i < news.size(); i++) {
                                                 if (news.get(i).news_id.equals(snapshot.getKey())) {
@@ -70,61 +71,22 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
                                         }
                                         postValue(news);
                                     }
-                                } catch (Exception exception) {
-                                    Log.d(constants.TAG, exception.getMessage());
                                 }
 
-
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                    Log.d(constants.TAG, error.getMessage());
+                                }
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                Log.d(constants.TAG, error.getMessage());
-                            }
-                        }
-                );
+                    );
+                }
+            } catch (Exception exception) {
+                Log.d(constants.TAG, exception.getMessage());
             }
         }
 
         @Override
         public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-            if (snapshot.exists()) {
-                String newsId = snapshot.getValue(NewsUser.class).news_id;
-                int finalCount_news = (int) snapshot.getChildrenCount();
-
-                mReference.child(constants.NODE_NEWS).child(newsId).addValueEventListener(
-                        new ValueEventListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.N)
-                            @Override
-                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                try {
-                                    if (snapshot != null) {
-                                        if (news.size() == finalCount_news)
-                                            for (int i = 0; i < news.size(); i++) {
-                                                if (news.get(i).news_id.equals(snapshot.getKey())) {
-                                                    news.set(i, snapshot.getValue(News.class));
-                                                    break;
-                                                }
-                                            }
-                                        else {
-                                            news.add(snapshot.getValue(News.class));
-                                        }
-                                        postValue(news);
-                                    }
-                                } catch (Exception exception) {
-                                    Log.d(constants.TAG, exception.getMessage());
-                                }
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                Log.d(constants.TAG, error.getMessage());
-                            }
-                        }
-                );
-            }
         }
 
         @Override
@@ -148,15 +110,11 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
     protected void onActive() {
         super.onActive();
         mNewsUser.addChildEventListener(childEventListener);
-
-//        mReference.addValueEventListener(valueEventListener);
     }
 
     @Override
     protected void onInactive() {
         super.onInactive();
         mNewsUser.removeEventListener(childEventListener);
-//        mReference.child(constants.NODE_NEWS).
-//        mReference.removeEventListener(valueEventListener);
     }
 }

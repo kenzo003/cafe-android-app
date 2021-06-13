@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.cafe.models.Category;
 import com.example.cafe.models.CustomerUser;
 import com.example.cafe.models.News;
+import com.example.cafe.models.NewsUser;
 import com.example.cafe.models.Product;
 import com.example.cafe.models.User;
 import com.example.cafe.utilits.constants;
@@ -22,8 +23,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -221,9 +225,10 @@ public class AppRepository {
                 });
     }
 
-    public void insertNews(News news){
+    public void insertNews(News news) {
 
     }
+
     public void signOut() {
         mAuth.signOut();
         userMutableLiveData.postValue(mAuth.getCurrentUser());
@@ -232,6 +237,28 @@ public class AppRepository {
 
     public MutableLiveData<String> getMsg() {
         return msg;
+    }
+
+    public void deleteNews(News news) {
+        mReference.child(constants.NODE_NEWS_USERS)
+                .orderByChild(constants.USER_ID).equalTo(mAuth.getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                for (DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                                    if (dataSnapshot.getValue(NewsUser.class).news_id.equals(news.news_id))
+                                    dataSnapshot.getRef().removeValue();
+                                }
+//                                snapshot.getRef().removeValue();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                            }
+                        }
+                );
     }
 
     public void getImage(String url) {

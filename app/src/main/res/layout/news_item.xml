@@ -15,6 +15,18 @@
         app:cardCornerRadius="10dp"
         app:cardElevation="@dimen/cardview_default_elevation">
 
+        <Button
+            android:id="@+id/ni_btn_news_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:text="Удалить"
+            android:textStyle="bold"
+            android:textSize="11sp"
+            android:textColor="@android:color/secondary_text_dark"
+            android:background="@android:color/transparent"
+            />
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
@@ -64,10 +76,10 @@
                 android:id="@+id/ni_layoutDat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_alignBottom="@+id/ni_img_v_shadow_bottom"
-                android:layout_marginBottom="20dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/round_white"
                 android:padding="5dp">
 
@@ -113,8 +125,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="16dp"
-                android:text="Descd"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                android:text="Descd" />
 
             <TextView
                 android:id="@+id/source"

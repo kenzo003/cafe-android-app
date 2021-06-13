@@ -65,15 +65,28 @@ public class NewsFragment extends Fragment {
             }
         });
 
+        adapter.setOnNewsDeleteClickListener(
+                new NewsAdapter.OnItemClickListener() {
+                    @Override
+                    public void onNewsClick(View view, int position) {
+                        mViewModel.deleteNews(adapter.getNews(position));
+                        adapter.delNews(position);
+                    }
+                }
+        );
+
+
         observerNews = new Observer<List<News>>() {
             @Override
             public void onChanged(List<News> news) {
-                adapter.setNews(news);            }
+                adapter.setNews(news);
+            }
         };
 
         mViewModel.getAllNews().observe(this, observerNews);
 
     }
+
 
     @Override
     public void onDestroy() {

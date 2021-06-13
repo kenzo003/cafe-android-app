@@ -27,5 +27,9 @@ public class NewsViewModel extends AndroidViewModel {
         return allNews;
     }
 
+    public void deleteNews(News news){
+        repository.deleteNews(news);
+    }
+
 
 }
