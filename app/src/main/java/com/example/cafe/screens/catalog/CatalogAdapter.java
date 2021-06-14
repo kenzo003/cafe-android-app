@@ -1,9 +1,11 @@
 package com.example.cafe.screens.catalog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +29,9 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
 
     private List<Product> products;
     private OnItemClickListener OnItemClickListener;
-    private Context context;
+    private OnItemClickListener OnItemBasketClickListener;
+    private OnItemClickListener OnItemFavoriteClickListener;
+    private final Context context;
 
 
     public CatalogAdapter(List<Product> products, Context context) {
@@ -36,12 +40,16 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
     }
 
     public void setCatalog(List<Product> products) {
-        this.products = products;
+        if (products != null)
+            this.products = products;
         notifyDataSetChanged();
     }
 
-    public Product getProduct(int position){
-        return products.get(position);
+    public Product getProduct(int position) {
+        if (position >= 0 && position < products.size())
+            return products.get(position);
+        else
+            return null;
     }
 
     @NonNull
@@ -52,11 +60,11 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
         return new CatalogAdapter.CatalogViewHolder(view);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(@NonNull @NotNull CatalogAdapter.CatalogViewHolder holder, int position) {
-
-        holder.bind(products.get(position));
         Product model = products.get(position);
+        holder.bind(model);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.centerCrop();
@@ -65,7 +73,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(model.product_name)
+                .load(model.product_logo)
                 .apply(requestOptions)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.logo);
@@ -74,27 +82,58 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
 
     @Override
     public int getItemCount() {
-        return products.size();
+        if (products != null)
+            return products.size();
+        else
+            return 0;
     }
+
     public void setOnCatalogClickListener(CatalogAdapter.OnItemClickListener onCatalogClickListener) {
         this.OnItemClickListener = onCatalogClickListener;
     }
 
+    public void setOnBasketClickListener(CatalogAdapter.OnItemClickListener onBasketClickListener) {
+        this.OnItemBasketClickListener = onBasketClickListener;
+    }
+
+    public void setOnFavoriteClickListener(CatalogAdapter.OnItemClickListener onFavoriteClickListener) {
+        this.OnItemFavoriteClickListener = onFavoriteClickListener;
+    }
+
     final class CatalogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        //        private OnItemClickListener onItemClickListener;
         private final ImageView logo;
         private final TextView name;
+        private final TextView price;
+        private final Button addBasket;
+        private final Button addFavorite;
 
 
+        //TODO: Здесь добавить событе клика по корзине
         public CatalogViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            logo = (ImageView) itemView.findViewById(R.id.ci_img_v_product_logo);
-            name = (TextView) itemView.findViewById(R.id.ci_txt_v_product_name);
+            logo = itemView.findViewById(R.id.ci_img_v_product_logo);
+            name = itemView.findViewById(R.id.ci_txt_v_product_name);
+            price = itemView.findViewById(R.id.ci_txt_v_product_price);
+            addFavorite = itemView.findViewById(R.id.ci_btn_product_favorite_add);
+            addBasket = itemView.findViewById(R.id.ci_btn_product_basket_add);
+
             itemView.setOnClickListener(this);
+            addFavorite.setOnClickListener(this::onFavoriteClick);
+            addBasket.setOnClickListener(this::onBasketClick);
         }
 
-        private void bind(Product product){
+        @SuppressLint("SetTextI18n")
+        private void bind(Product product) {
             name.setText(product.product_name);
+            price.setText(product.product_price + " Р");
+        }
+
+        private void onBasketClick(View view) {
+            OnItemBasketClickListener.onNewsClick(view, getAbsoluteAdapterPosition());
+        }
+
+        private void onFavoriteClick(View view) {
+            OnItemFavoriteClickListener.onNewsClick(view, getAbsoluteAdapterPosition());
         }
 
         @Override
@@ -102,7 +141,6 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
             OnItemClickListener.onNewsClick(v, getAbsoluteAdapterPosition());
         }
     }
-
 
     interface OnItemClickListener {
         void onNewsClick(View view, int position);

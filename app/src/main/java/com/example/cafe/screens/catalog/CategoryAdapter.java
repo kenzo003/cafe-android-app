@@ -62,7 +62,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull @NotNull CategoryAdapter.CategoryViewHolder holder, int position) {
         Category model = categories.get(position);
         holder.bind(model);
-//        holder.itemView.setTag(categories);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.centerCrop();

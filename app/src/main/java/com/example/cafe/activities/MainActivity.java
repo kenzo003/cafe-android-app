@@ -61,12 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.authFragment2:
                 case R.id.enterPinFragment2:
                 case R.id.loginFragment:
+                case R.id.productFragment:
                  {
                     hideToolbarAndNavBar();
-                    break;
-                }
-                case R.id.categoryFragment:{
-//                    mToolbar.setVisibility(View.GONE);
                     break;
                 }
                 default:

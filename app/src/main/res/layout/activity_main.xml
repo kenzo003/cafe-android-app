@@ -10,12 +10,9 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:background="@color/colorPrimary"
-        android:elevation="4dp"
         android:theme="@style/Theme.Cafe"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -49,7 +49,6 @@ public class NewsCardFragment extends Fragment {
         super.onStart();
 
         activity = (MainActivity) getActivity();
-
         mViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         try {
             assert getArguments() != null;

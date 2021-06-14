@@ -136,7 +136,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             data = itemView.findViewById(R.id.ni_txt_v_pubDate);
             progress_bar = itemView.findViewById(R.id.ni_prg_bar);
 
-
             delete.setOnClickListener(this::onDelClick);
             itemView.setOnClickListener(this);
         }

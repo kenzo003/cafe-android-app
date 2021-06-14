@@ -3,6 +3,7 @@
 
     <style name="Theme.Cafe.Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="titleTextColor">@color/colorSurface</item>
+        <item name="android:colorControlNormal">@color/colorSurface</item>
     </style>
 
     <!--    EditText для AuthFragment-->

@@ -46,9 +46,9 @@ public class CategoryLiveData extends MutableLiveData<List<Category>> {
                 for (DataSnapshot item : snapshot.getChildren()) {
                     if (item.exists() && item.getValue() != null) {
                         category.add(item.getValue(Category.class));
-                        postValue(category);
                     }
                 }
+                postValue(category);
             } catch (Exception e) {
                 Log.d(constants.TAG, e.getMessage());
             }

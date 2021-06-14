@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.cafe.models.Basket;
 import com.example.cafe.models.Category;
 import com.example.cafe.models.CustomerUser;
 import com.example.cafe.models.News;
@@ -13,6 +14,7 @@ import com.example.cafe.models.NewsUser;
 import com.example.cafe.models.Product;
 import com.example.cafe.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -35,12 +38,19 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.cafe.utilits.constants.CATEGORY_ID;
+import static com.example.cafe.utilits.constants.BASKET_ID;
+import static com.example.cafe.utilits.constants.BASKET_PRODUCT;
+import static com.example.cafe.utilits.constants.BASKET_PRODUCT_COUNT;
+import static com.example.cafe.utilits.constants.BASKET_USER;
+import static com.example.cafe.utilits.constants.NODE_BASKET;
 import static com.example.cafe.utilits.constants.NODE_NEWS_USERS;
 import static com.example.cafe.utilits.constants.NODE_PRODUCT;
+import static com.example.cafe.utilits.constants.PRODUCT_CATEGORY;
 import static com.example.cafe.utilits.constants.PRODUCT_DESC;
 import static com.example.cafe.utilits.constants.PRODUCT_ID;
+import static com.example.cafe.utilits.constants.PRODUCT_LOGO;
 import static com.example.cafe.utilits.constants.PRODUCT_NAME;
+import static com.example.cafe.utilits.constants.PRODUCT_OLD_PRICE;
 import static com.example.cafe.utilits.constants.PRODUCT_PRICE;
 import static com.example.cafe.utilits.constants.PRODUCT_QUANTITY;
 import static com.example.cafe.utilits.constants.PRODUCT_UNIT;
@@ -90,25 +100,6 @@ public class AppRepository {
         return allProduct;
     }
 
-    public void insertProduct(Product product) {
-        String idProduct = mReference.push().getKey();
-        HashMap<String, Object> mapProduct = new HashMap<>();
-        mapProduct.put(PRODUCT_ID, idProduct);
-        mapProduct.put(PRODUCT_NAME, product.product_name);
-        mapProduct.put(PRODUCT_UNIT, product.product_unit);
-        mapProduct.put(PRODUCT_DESC, product.product_description);
-        mapProduct.put(PRODUCT_PRICE, product.product_price);
-        mapProduct.put(PRODUCT_QUANTITY, product.product_quantity);
-        mapProduct.put(PRODUCT_VISIBILITY, product.product_visibility);
-        mapProduct.put(CATEGORY_ID, product.category_id);
-
-        assert idProduct != null;
-        mReference.child(NODE_PRODUCT).child(idProduct)
-                .updateChildren(mapProduct)
-                .addOnFailureListener(
-                        e -> Log.d(TAG, e.getMessage())
-                );
-    }
 
     public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
         mAuth.createUserWithEmailAndPassword(email_address, password)
@@ -207,9 +198,6 @@ public class AppRepository {
                 });
     }
 
-    public void insertNews(News news) {
-
-    }
 
     public void signOut() {
         mAuth.signOut();
@@ -221,23 +209,102 @@ public class AppRepository {
         return this.msg;
     }
 
-//    public void deleteNews(News rNews) {
-//        mReference.child(NODE_NEWS_USERS).orderByChild(USER_ID)
-//                .equalTo(UID).get().addOnCompleteListener(
-//                task -> {
-//                    if (task.isSuccessful()) {
-//                        for (DataSnapshot news : task.getResult().getChildren()) {
-//                            NewsUser other = news.getValue(NewsUser.class);
-//                            String id = (other != null) ? other.news_id : "";
-//                            if (id.equals(rNews.news_id)) { //TODO: Если здесь сработает, то не нужно юудет удалять из адаптера, LiveData справится
-//                                news.getRef().removeValue();
-//                                return;
-//                            }
-//                        }
-//                    }
-//                }
-//        );
-//    }
+    public void insertProduct(Product product) {
+        String idProduct = mReference.push().getKey();
+        HashMap<String, Object> mapProduct = new HashMap<>();
+        mapProduct.put(PRODUCT_ID, idProduct);
+        mapProduct.put(PRODUCT_NAME, product.product_name);
+        mapProduct.put(PRODUCT_UNIT, product.product_unit);
+        mapProduct.put(PRODUCT_DESC, product.product_description);
+        mapProduct.put(PRODUCT_PRICE, product.product_price);
+        mapProduct.put(PRODUCT_OLD_PRICE, product.product_old_price);
+        mapProduct.put(PRODUCT_QUANTITY, product.product_quantity);
+        mapProduct.put(PRODUCT_VISIBILITY, product.product_visibility);
+        mapProduct.put(PRODUCT_CATEGORY, product.product_category);
+        mapProduct.put(PRODUCT_LOGO, product.product_logo);
+
+        assert idProduct != null;
+        mReference.child(NODE_PRODUCT).child(idProduct)
+                .updateChildren(mapProduct)
+                .addOnFailureListener(
+                        e -> Log.d(TAG, e.getMessage())
+                );
+    }
+
+    public void insertProductBasket(String productId, String productCount, String productMaxCount, OnSuccessListener<? super Void> onSuccess) {
+        String idBasket = mReference.push().getKey();
+        HashMap<String, Object> mapBasket = new HashMap<>();
+        mapBasket.put(BASKET_ID, idBasket);
+        mapBasket.put(BASKET_PRODUCT, productId);
+        mapBasket.put(BASKET_PRODUCT_COUNT, productCount);
+        mapBasket.put(BASKET_USER, UID);
+
+        assert idBasket != null;
+        mReference.child(NODE_BASKET).child(idBasket)
+                .updateChildren(mapBasket)
+                .addOnFailureListener(
+                        e -> Log.d(TAG, e.getMessage())
+                )
+                .addOnSuccessListener(onSuccess)
+                .addOnCompleteListener(
+                        task -> {
+                            final int[] countItem = {0};
+                            //Здесь проверяме текущий товар в Таблице корзина
+                            //Он не должен повторяться и превышать допустимое количсетво товара
+                            if (task.isSuccessful()) {
+                                Query mBasket = mReference.child(NODE_BASKET).orderByChild(BASKET_USER).equalTo(UID);
+                                mBasket.addListenerForSingleValueEvent(
+                                        new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                try {
+                                                    if (snapshot.exists()) {
+                                                        int i = 0; //Итерации
+                                                        //Перебираем все товары в корзине для текущего пользователя
+                                                        for (DataSnapshot item : snapshot.getChildren()) {
+                                                            //Если корзина не пуста
+                                                            if (item.exists() && item.getValue() != null) {
+                                                                Basket basket = item.getValue(Basket.class);
+
+                                                                //Если товар равен добавляему товару
+                                                                assert basket != null;
+                                                                if (basket.basket_product.equals(productId)) {
+                                                                    countItem[0] = countItem[0] + Integer.parseInt(basket.basket_product_count);
+
+                                                                    //Если рассматриваем последний элемент, то не удалем его, а обновляем данные
+                                                                    if (i == snapshot.getChildrenCount() - 1) {
+                                                                        //Проверяем количество товара
+                                                                        if (countItem[0] > Integer.parseInt(productMaxCount))
+                                                                            countItem[0] = Integer.parseInt(productMaxCount);
+
+                                                                        mapBasket.put(BASKET_ID, item.getKey());
+                                                                        mapBasket.put(BASKET_PRODUCT_COUNT, String.valueOf(countItem[0]));
+
+                                                                        item.getRef().updateChildren(mapBasket);
+                                                                        break;
+                                                                    }
+                                                                    item.getRef().removeValue();
+                                                                }
+                                                                i++;
+                                                            }
+                                                        }
+                                                    }
+                                                } catch (Exception e) {
+                                                    Log.d(TAG, e.getMessage());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                Log.d(TAG, error.getMessage());
+                                            }
+                                        }
+                                );
+
+                            }
+                        }
+                );
+    }
 
     public void deleteNews(News news, OnCompleteListener<Void> OnComplete) {
         mReference.child(NODE_NEWS_USERS)

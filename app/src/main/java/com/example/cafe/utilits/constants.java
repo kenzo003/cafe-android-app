@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class constants {
+    public static final String VISIBLE = "VISIBLE";
     //CuRRent
     public static String CURRENT_CATEGORY_ID = "";
     public static final String ID_CUSTOMER = "zYIxy03gxtajuqUKtnmUidQOJ0A2";
@@ -48,16 +49,27 @@ public class constants {
     public static final String PRODUCT_ID = "product_id";
     public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_UNIT = "product_unit";
-    public static final String PRODUCT_DESC = "product_desc";
+    public static final String PRODUCT_DESC = "product_description";
     public static final String PRODUCT_PRICE = "product_price";
+    public static final String PRODUCT_OLD_PRICE = "product_old_price";
     public static final String PRODUCT_VISIBILITY = "product_visibility";
     public static final String PRODUCT_QUANTITY = "product_quantity";
+    public static final String PRODUCT_CATEGORY = "product_category";
+    public static final String PRODUCT_LOGO = "product_logo";
 
     //Category
     public static final String NODE_CATEGORY = "category";
     public static final String CATEGORY_ID = "category_id";
     public static final String CATEGORY_NAME = "category_name";
     public static final String CATEGORY_LOGO = "category_logo";
+
+    //Basket
+    public static final String NODE_BASKET = "basket";
+    public static final String BASKET_ID = "basket_id";
+    public static final String BASKET_USER = "basket_user";
+    public static final String BASKET_PRODUCT = "basket_product";
+    public static final String BASKET_PRODUCT_COUNT = "basket_product_count";
+
 
 
 

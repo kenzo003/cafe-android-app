@@ -61,9 +61,10 @@ public class CategoryFragment extends Fragment {
                 (view, position) -> {
                     if (categoryAdapter.getCategory(position) != null){
                         String id = categoryAdapter.getCategory(position).category_id;
+                        String name = categoryAdapter.getCategory(position).category_name;
                         Bundle bundle = new Bundle();
                         bundle.putString(constants.CATEGORY_ID, id);
-                        constants.CURRENT_CATEGORY_ID = id; //Указываем категорию в которой находимся
+                        bundle.putString(constants.CATEGORY_NAME, name);
                         activity.navController.navigate(R.id.action_categoryFragment_to_catalogFragment2, bundle); //Переходим в раздел каталога с данной категорией
                     }
                 }

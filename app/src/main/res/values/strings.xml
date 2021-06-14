@@ -30,4 +30,12 @@
     <string name="category_name">Название категории</string>
     <string name="delete">Удалить</string>
     <string name="todo">TODO</string>
+    <string name="category">Категория</string>
+    <string name="add_basket">В корзину</string>
+    <string name="product_name">Название продукта</string>
+    <string name="del">-</string>
+    <string name="add">+</string>
+    <string name="_0">0</string>
+    <string name="description">Описание</string>
+    <string name="add_to_basket">Добавить в корзину</string>
 </resources>
