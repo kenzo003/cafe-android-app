@@ -21,6 +21,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.example.cafe.R;
 import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.FragmentNewsCardBinding;
 import com.example.cafe.models.News;
@@ -58,12 +59,13 @@ public class NewsCardFragment extends Fragment {
                 mBinding.niTxtVPubDate.setText(news.news_date);
                 mBinding.fncTxtVNewsDesc.setText(news.news_desc);
                 mBinding.niBtnDelete.setOnClickListener(
-                        v -> mViewModel.deleteNews(news, task -> {
-                            if (task.isSuccessful()){
-                                activity.navController.popBackStack();
-                            }
-                        })
+                        v -> mViewModel.deleteNews(news,
+                                task -> {
+                                    if (task.isSuccessful())
+                                        activity.navController.navigate(R.id.action_newsCardFragment_to_newsFragment2);
+                                })
                 );
+
 
                 RequestOptions requestOptions = new RequestOptions();
                 requestOptions.centerCrop();

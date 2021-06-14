@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cafe.R;
@@ -27,19 +27,16 @@ public class CategoryFragment extends Fragment {
 
     private CatalogViewModel mViewModel;
     private CategoryFragmentBinding mBinding;
-    private RecyclerView mRecyclerView;
     private CategoryAdapter categoryAdapter;
     private Observer<List<Category>> observerCategory;
-
-    public static CategoryFragment newInstance() {
-        return new CategoryFragment();
-    }
+    private MainActivity activity;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        activity = (MainActivity) getActivity();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            ((MainActivity) getActivity()).navController.navigate(R.id.auth_nav);
+            activity.navController.navigate(R.id.auth_nav);
         }
         mBinding = CategoryFragmentBinding.inflate(inflater);
         return mBinding.getRoot();
@@ -52,35 +49,27 @@ public class CategoryFragment extends Fragment {
     }
 
     private void init() {
-        mViewModel = new ViewModelProvider(this).get(CatalogViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(CatalogViewModel.class); //TODO: Здесь проверить
         categoryAdapter = new CategoryAdapter(new LinkedList<>(), getContext());
-        mRecyclerView = mBinding.cfRecVCategory;
+        RecyclerView mRecyclerView = mBinding.cfRecVCategory;
         mRecyclerView.setAdapter(categoryAdapter);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
         categoryAdapter.setOnCategoryClickListener(
-                new CategoryAdapter.OnItemClickListener() {
-                    @Override
-                    public void onNewsClick(View view, int position) {
-                        String id = categoryAdapter.getCategory(position).id;
+                (view, position) -> {
+                    if (categoryAdapter.getCategory(position) != null){
+                        String id = categoryAdapter.getCategory(position).category_id;
                         Bundle bundle = new Bundle();
                         bundle.putString(constants.CATEGORY_ID, id);
-                        constants.CURRENT_CATEGORY_ID = id;
-                        ((MainActivity) getActivity()).navController.navigate(R.id.action_categoryFragment_to_catalogFragment2, bundle);
+                        constants.CURRENT_CATEGORY_ID = id; //Указываем категорию в которой находимся
+                        activity.navController.navigate(R.id.action_categoryFragment_to_catalogFragment2, bundle); //Переходим в раздел каталога с данной категорией
                     }
                 }
         );
 
-        observerCategory = new Observer<List<Category>>() {
-            @Override
-            public void onChanged(List<Category> categories) {
-                categoryAdapter.setCategories(categories);
-            }
-        };
-
-//        mViewModel.getAllNews().observe(this, observerNews);
+        observerCategory = categories -> categoryAdapter.setCategories(categories);
         mViewModel.getAllCategory().observe(this, observerCategory);
     }
 

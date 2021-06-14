@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,18 +29,22 @@ public class NewsFragment extends Fragment {
 
     private NewsViewModel mViewModel;
     private NewsFragmentBinding mBinding;
-    private RecyclerView mRecyclerView;
     private NewsAdapter adapter;
-    private Observer<List<News>> observerNews;
+    private Observer<List<News>> observerNews; //Реагирует когда данные в БД изменились
     private MainActivity activity;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         activity = (MainActivity) getActivity();
+        //Проверяем авторизован ли пользователь
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            //Если нет то перемещаем на экран авторизации TODO:Сомнения по поводу backstack, возможно перейдет в главное меню, если нажать назад
             activity.navController.navigate(R.id.auth_nav);
         }
+
         mBinding = NewsFragmentBinding.inflate(inflater);
         return mBinding.getRoot();
     }
@@ -56,32 +59,40 @@ public class NewsFragment extends Fragment {
     private void init() {
         mViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         adapter = new NewsAdapter(new LinkedList<>(), getContext());
-        mRecyclerView = mBinding.nfRecView;
+        RecyclerView mRecyclerView = mBinding.nfRecView;
         mRecyclerView.setAdapter(adapter);
+
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
+        //Событие клика по карточке Новости
         adapter.setOnNewsClickListener((view, position) -> {
             try {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(constants.NODE_NEWS, adapter.getNews(position));
-                activity.navController.navigate(R.id.action_newsFragment2_to_newsCardFragment, bundle);
-                Toast.makeText(getContext(), adapter.getNews(position).news_title, Toast.LENGTH_LONG).show();
+                News news = adapter.getNews(position);
+                if (news != null) {
+                    //Передаем модель и переходим к карточке новости
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(constants.NODE_NEWS, news);
+
+                    activity.navController.navigate(R.id.action_newsFragment2_to_newsCardFragment, bundle);
+                }
             } catch (Exception e) {
-                Log.d(constants.TAG, e.getMessage());
+                Log.d(constants.TAG, e.getMessage()); //Если вдруг что-то пошло не так, но должно работать как часы
             }
         });
 
+        //Удаляем новость из БД
         adapter.setOnNewsDeleteClickListener(
                 (view, position) -> {
-                    mViewModel.deleteNews(adapter.getNews(position), null);
-                    if (position == 0)
+                    News news = adapter.getNews(position);
+                    if (news != null) {
+                        mViewModel.deleteNews(adapter.getNews(position), null);
                         adapter.delNews(position);
+                    }
+
                 }
         );
-
-
         observerNews = news -> adapter.setNews(news);
         mViewModel.getAllNews().observe(this, observerNews);
     }

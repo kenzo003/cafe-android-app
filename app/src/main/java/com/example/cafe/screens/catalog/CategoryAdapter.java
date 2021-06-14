@@ -1,5 +1,6 @@
 package com.example.cafe.screens.catalog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +37,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public void setCategories(List<Category> categories) {
-        this.categories = categories;
+        if (categories != null)
+            this.categories = categories;
         notifyDataSetChanged();
     }
 
-    public Category getCategory(int position){
-        return categories.get(position);
+    public Category getCategory(int position) {
+        if (position >= 0 && position < categories.size())
+            return categories.get(position);
+        else
+            return null;
     }
 
     @NonNull
@@ -52,12 +57,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return new CategoryViewHolder(view);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryAdapter.CategoryViewHolder holder, int position) {
-
-        holder.bind(categories.get(position));
         Category model = categories.get(position);
-        holder.itemView.setTag(categories);
+        holder.bind(model);
+//        holder.itemView.setTag(categories);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.centerCrop();
@@ -66,7 +71,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(context)
-                .load(model.logo_id)
+                .load(model.category_logo)
                 .apply(requestOptions)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.logo);
@@ -75,27 +80,30 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        if (categories != null)
+            return categories.size();
+        else
+            return 0;
     }
+
     public void setOnCategoryClickListener(OnItemClickListener onCategoryClickListener) {
         this.OnItemClickListener = onCategoryClickListener;
     }
 
     final class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        //        private OnItemClickListener onItemClickListener;
         private final ImageView logo;
         private final TextView name;
 
 
         public CategoryViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            logo = (ImageView) itemView.findViewById(R.id.ci_img_v_logo);
-            name = (TextView) itemView.findViewById(R.id.ci_txt_v_category_name);
+            logo = itemView.findViewById(R.id.ci_img_v_category_logo);
+            name = itemView.findViewById(R.id.ci_txt_v_category_name);
             itemView.setOnClickListener(this);
         }
 
-        private void bind(Category category){
-            name.setText(category.name);
+        private void bind(Category category) {
+            name.setText(category.category_name);
         }
 
         @Override

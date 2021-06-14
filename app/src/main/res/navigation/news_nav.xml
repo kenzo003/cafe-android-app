@@ -21,6 +21,7 @@
         tools:layout="@layout/fragment_news_card" >
         <action
             android:id="@+id/action_newsCardFragment_to_newsFragment2"
-            app:destination="@id/newsFragment2" />
+            app:destination="@id/newsFragment2"
+            app:popUpTo="@id/news_nav" />
     </fragment>
 </navigation>

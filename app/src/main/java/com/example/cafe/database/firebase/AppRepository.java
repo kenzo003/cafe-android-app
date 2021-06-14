@@ -53,26 +53,29 @@ import static com.example.cafe.utilits.constants.VER_CUR_USER_NEW_PHONE;
 import static com.example.cafe.utilits.constants.VER_NEW_USER;
 
 public class AppRepository {
-    private FirebaseAuth mAuth;
-    private DatabaseReference mReference;
-    private MutableLiveData<FirebaseUser> userMutableLiveData;
-    private MutableLiveData<String> msg;
-    private MutableLiveData<List<News>> allNews;
-    private MutableLiveData<List<Category>> allCategory;
-    private MutableLiveData<List<Product>> allProduct;
-    private FirebaseUser user;
-    private StorageReference storageRef;
+    private final FirebaseAuth mAuth; //Хранилище пользователей
+    private final DatabaseReference mReference; //Корневой узел БД
+    private final StorageReference storageRef;  //Корень хранилища данных
+    private final String UID; //Текущий пользователь
+
+    private final MutableLiveData<List<News>> allNews;
+    private final MutableLiveData<FirebaseUser> userMutableLiveData; //LiveData Users ()
+    private final MutableLiveData<String> msg;
+    private final MutableLiveData<List<Category>> allCategory;
+    private final MutableLiveData<List<Product>> allProduct;
 
     public AppRepository() {
         mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
         mReference = FirebaseDatabase.getInstance().getReference();
+        storageRef = FirebaseStorage.getInstance().getReference();
+        UID = (mAuth.getCurrentUser() != null) ? mAuth.getCurrentUser().getUid() : "";
+
+        allNews = new NewsLiveData();
+
         userMutableLiveData = new MutableLiveData<>();
         msg = new MutableLiveData<>();
-        allNews = new AllNewsLiveData();
-        allCategory = new AllCategoryLiveData();
+        allCategory = new CategoryLiveData();
         allProduct = new AllProductLiveData();
-        storageRef = FirebaseStorage.getInstance().getReference();
     }
 
     public MutableLiveData<List<News>> getAllNews() {
@@ -109,7 +112,7 @@ public class AppRepository {
 
     public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
         mAuth.createUserWithEmailAndPassword(email_address, password)
-                .addOnCompleteListener((OnCompleteListener<AuthResult>) onComplete)
+                .addOnCompleteListener(onComplete)
                 .addOnSuccessListener(
                         authResult -> insertUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id)
                 )
@@ -218,16 +221,38 @@ public class AppRepository {
         return this.msg;
     }
 
+//    public void deleteNews(News rNews) {
+//        mReference.child(NODE_NEWS_USERS).orderByChild(USER_ID)
+//                .equalTo(UID).get().addOnCompleteListener(
+//                task -> {
+//                    if (task.isSuccessful()) {
+//                        for (DataSnapshot news : task.getResult().getChildren()) {
+//                            NewsUser other = news.getValue(NewsUser.class);
+//                            String id = (other != null) ? other.news_id : "";
+//                            if (id.equals(rNews.news_id)) { //TODO: Если здесь сработает, то не нужно юудет удалять из адаптера, LiveData справится
+//                                news.getRef().removeValue();
+//                                return;
+//                            }
+//                        }
+//                    }
+//                }
+//        );
+//    }
+
     public void deleteNews(News news, OnCompleteListener<Void> OnComplete) {
         mReference.child(NODE_NEWS_USERS)
-                .orderByChild(USER_ID).equalTo(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+                .orderByChild(USER_ID).equalTo(UID)
                 .addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                    if (Objects.requireNonNull(dataSnapshot.getValue(NewsUser.class)).news_id.equals(news.news_id))
-                                        dataSnapshot.getRef().removeValue().addOnCompleteListener((OnCompleteListener<Void>) OnComplete);
+                                    NewsUser other = dataSnapshot.getValue(NewsUser.class);
+                                    String id = (other != null) ? other.news_id : "";
+                                    if (id.equals(news.news_id)) { //TODO: Если здесь сработает, то не нужно юудет удалять из адаптера, LiveData справится
+                                        dataSnapshot.getRef().removeValue().addOnCompleteListener(OnComplete);
+                                        return;
+                                    }
                                 }
                             }
 

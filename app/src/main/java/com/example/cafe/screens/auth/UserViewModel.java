@@ -29,7 +29,7 @@ public class UserViewModel extends AndroidViewModel {
         msg = repository.getMsg();
     }
 
-    public void verificationSMS(String phone_number, String typeRequest, Activity activity, PhoneAuthProvider.OnVerificationStateChangedCallbacks onCodeSent){
+    public void verificationSMS(String phone_number, String typeRequest, Activity activity, PhoneAuthProvider.OnVerificationStateChangedCallbacks onCodeSent) {
         repository.verificationSMS(phone_number, typeRequest, activity, onCodeSent);
     }
 
@@ -41,16 +41,16 @@ public class UserViewModel extends AndroidViewModel {
         repository.signInWithCredential(id, smsCode);
     }
 
-    public void signOut(){
+    public void signOut() {
         repository.signOut();
     }
 
-    public void loginUser(String email_address, String password, OnCompleteListener<AuthResult> onComplete){
+    public void loginUser(String email_address, String password, OnCompleteListener<AuthResult> onComplete) {
         repository.loginUser(email_address, password, onComplete);
     }
 
     public void updatePhoneNumber(String id, String smsCode, String typeRequest, OnCompleteListener<Void> onComplete) {
-        repository.updatePhoneNumber(id, smsCode,typeRequest, onComplete);
+        repository.updatePhoneNumber(id, smsCode, typeRequest, onComplete);
     }
 
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {

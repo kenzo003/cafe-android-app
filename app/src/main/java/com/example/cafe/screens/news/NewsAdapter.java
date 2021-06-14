@@ -3,7 +3,6 @@ package com.example.cafe.screens.news;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.bumptech.glide.request.target.Target;
 import com.example.cafe.R;
 import com.example.cafe.models.News;
 import com.example.cafe.utilits.Utils;
-import com.example.cafe.utilits.constants;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -54,17 +52,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     public News getNews(int position) {
-        return News.cloneNews(this.news.get(position));
+        if (position >= 0 && position < news.size())
+            return News.cloneNews(this.news.get(position));
+        else return null;
     }
 
     public void delNews(int position) {
-        try {
-            news.remove(position);
-            notifyDataSetChanged();
-        }
-        catch (Exception e){
-            Log.d(constants.TAG, e.getMessage());
-        }
+        if (position >= 0 && position < news.size())
+            this.news.remove(position);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -133,12 +129,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         public NewsViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            delete = (Button) itemView.findViewById(R.id.ni_btn_news_del);
-            header = (TextView) itemView.findViewById(R.id.ni_txt_V_title);
-            description = (TextView) itemView.findViewById((R.id.ni_txt_v_desc));
-            media = (ImageView) itemView.findViewById(R.id.ni_img_v_placeholder);
-            data = (TextView) itemView.findViewById(R.id.ni_txt_v_pubDate);
-            progress_bar = (ProgressBar) itemView.findViewById(R.id.ni_prg_bar);
+            delete = itemView.findViewById(R.id.ni_btn_news_del);
+            header = itemView.findViewById(R.id.ni_txt_V_title);
+            description = itemView.findViewById((R.id.ni_txt_v_desc));
+            media = itemView.findViewById(R.id.ni_img_v_placeholder);
+            data = itemView.findViewById(R.id.ni_txt_v_pubDate);
+            progress_bar = itemView.findViewById(R.id.ni_prg_bar);
 
 
             delete.setOnClickListener(this::onDelClick);

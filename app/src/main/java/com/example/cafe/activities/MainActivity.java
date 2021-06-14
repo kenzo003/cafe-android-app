@@ -43,11 +43,6 @@ public class MainActivity extends AppCompatActivity {
         mBinding = null;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     @SuppressLint("NonConstantResourceId")
     private void init() {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -65,8 +60,13 @@ public class MainActivity extends AppCompatActivity {
             switch (navDestination.getId()) {
                 case R.id.authFragment2:
                 case R.id.enterPinFragment2:
-                case R.id.loginFragment: {
-                    showToolbarAndNavBar();
+                case R.id.loginFragment:
+                 {
+                    hideToolbarAndNavBar();
+                    break;
+                }
+                case R.id.categoryFragment:{
+//                    mToolbar.setVisibility(View.GONE);
                     break;
                 }
                 default:
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         return userViewModel;
     }
 
-    private void showToolbarAndNavBar() {
+    private void hideToolbarAndNavBar() {
         mBottomNavigation.setVisibility(View.GONE);
         mToolbar.setVisibility(View.GONE);
     }

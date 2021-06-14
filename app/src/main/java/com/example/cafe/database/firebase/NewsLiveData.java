@@ -7,9 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cafe.models.News;
-import com.example.cafe.models.NewsUser;
 import com.example.cafe.utilits.constants;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,41 +20,44 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class AllNewsLiveData extends MutableLiveData<List<News>> {
-    private FirebaseAuth mAuth;
-    private DatabaseReference mReference;
-    private FirebaseDatabase mInstance;
-    private Query mNewsUser;
-    private LinkedList<News> news;
-    private HashMap<DatabaseReference, ChildEventListener> listenerHashMap;
 
+//TODO: Нужно проверить обнуление списка перед изменением элементов
+public class NewsLiveData extends MutableLiveData<List<News>> {
+    private final LinkedList<News> news; //Список, в который пушим данные с сервака
+    private final FirebaseUser mAuth; //Текущий пользователь
+    private final DatabaseReference mReference; //Ссылка на корень БД
+    private final Query mNewsUser;     //Получаем все id новостей для текущего пользователя;
+    private final String UID; //UID текущего пользователя
 
-    public AllNewsLiveData() {
+    public NewsLiveData() {
         news = new LinkedList<>();
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance().getCurrentUser();
         mReference = FirebaseDatabase.getInstance().getReference();
+
+        UID = (mAuth != null) ? mAuth.getUid() : "";
         mNewsUser = mReference.child(constants.NODE_NEWS_USERS)
                 .orderByChild(constants.USER_ID)
-                .equalTo(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
-        mInstance = FirebaseDatabase.getInstance();
+                .equalTo(UID);
     }
 
-
-
-    ValueEventListener valueEventListener = new ValueEventListener() {
+    // callback для узла НовостиПользователи
+    private final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
             news.clear();
             try {
+                //Если данные не пусты и не равны null
                 if (snapshot.exists()) {
+                    //Перебираем все записи таблицы и получаем только для текущего пользователя
                     for (DataSnapshot news_user : snapshot.getChildren()) {
+                        //Если запись не пуста и значение для модели News существует
                         if (news_user.exists() && news_user.getValue() != null) {
-                            String newsId = Objects.requireNonNullElse(Objects.requireNonNull(news_user.getValue(NewsUser.class)).news_id, "");
+                            String newsId = Objects.requireNonNullElse(Objects.requireNonNull(news_user.getValue(News.class)).news_id, "");
+                            //Устанавливаем callback для этой новости
                             mReference.child(constants.NODE_NEWS).orderByChild(constants.NEWS_ID).equalTo(newsId).addChildEventListener(
                                     childEventListener
                             );
@@ -72,9 +75,11 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
         }
     };
 
-    private ChildEventListener childEventListener = new ChildEventListener() {
+    // callback для узла Новости
+    private final ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+            //Если данные не пусты и данные не равны null
             if (snapshot.exists() && snapshot.getValue() != null) {
                 news.add(snapshot.getValue(News.class));
                 postValue(news);
@@ -85,7 +90,9 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
         public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
             if (snapshot.exists() && snapshot.getValue() != null) {
                 int index = indexOf(news, snapshot.getKey());
-                news.set(index, snapshot.getValue(News.class));
+                //Контролируем выход за пределы границ списка Новостей
+                if (index >= 0 && news.size() > index)
+                    news.set(index, snapshot.getValue(News.class));
                 postValue(news);
             }
         }
@@ -109,8 +116,24 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
         }
     };
 
+    @Override
+    protected void onActive() {
+        super.onActive();
+        mNewsUser.addValueEventListener(valueEventListener); //Установка callback для узла НовостиПользователи
+    }
+
+    @Override
+    protected void onInactive() {
+        super.onInactive();
+        mReference.child(constants.NODE_NEWS).removeEventListener(childEventListener); //Удаление callback для узла Новости
+        mNewsUser.removeEventListener(valueEventListener); //Удаление callback для узла НовостиПользователи
+    }
+
+
+    //Utilities
+
     //получение индекса элемента по news_id
-    private int indexOf(List<News> list, String id) {
+    private static int indexOf(List<News> list, String id) {
         int index = -1;
         for (News value : list) {
             index++;
@@ -118,20 +141,6 @@ public class AllNewsLiveData extends MutableLiveData<List<News>> {
                 break;
         }
         return index;
-    }
-
-    @Override
-    protected void onActive() {
-        super.onActive();
-        mNewsUser.addValueEventListener(valueEventListener);
-    }
-
-    @Override
-    protected void onInactive() {
-        news.clear();
-        super.onInactive();
-        mReference.child(constants.NODE_NEWS).removeEventListener(childEventListener);
-        mNewsUser.removeEventListener(valueEventListener);
     }
 
 }
