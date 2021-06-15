@@ -38,4 +38,8 @@
     <string name="_0">0</string>
     <string name="description">Описание</string>
     <string name="add_to_basket">Добавить в корзину</string>
+    <string name="price">Общая стоимость</string>
+    <string name="get_to_order">Перейти к оформлению</string>
+    <string name="developed">Раздел находиться в стадии разработки</string>
+    <string name="empty_basket">Корзина пуста</string>
 </resources>

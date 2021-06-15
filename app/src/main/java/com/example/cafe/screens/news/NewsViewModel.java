@@ -31,10 +31,4 @@ public class NewsViewModel extends AndroidViewModel {
     public void deleteNews(News news, OnCompleteListener<Void> onCompleteListener){
         repository.deleteNews(news, onCompleteListener);
     }
-//
-//    public void deleteNews(News news){
-//        repository.deleteNews(news);
-//    }
-
-
 }

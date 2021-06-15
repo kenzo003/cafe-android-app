@@ -84,12 +84,12 @@ public class ProductFragment extends Fragment {
                     if (!product.product_id.isEmpty() && productCount > 0) { //TODO: Добавить проверку на количество товара
                         mViewModel.insertProductBasket(product.product_id, String.valueOf(productCount), product.product_quantity,
                                 unused -> {
-                                    Snackbar.make(requireContext(), mBinding.getRoot(), "Товар добавлен в корзину", Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(requireContext(), mBinding.getRoot(), "Товар добавлен в корзину", Snackbar.LENGTH_SHORT).show();
                                     productCount = 0;
                                     mBinding.fpTxtVProductCount.setText(String.valueOf(productCount));
                                 });
                     } else {
-                        Snackbar.make(requireActivity(), mBinding.getRoot(), "Количество товара не может быть равно 0", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(requireActivity(), mBinding.getRoot(), "Количество товара не может быть равно 0", Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 RequestOptions requestOptions = new RequestOptions();

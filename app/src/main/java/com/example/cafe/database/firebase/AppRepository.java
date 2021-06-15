@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cafe.models.Basket;
+import com.example.cafe.models.BasketProduct;
 import com.example.cafe.models.Category;
 import com.example.cafe.models.CustomerUser;
 import com.example.cafe.models.News;
@@ -73,6 +74,11 @@ public class AppRepository {
     private final MutableLiveData<String> msg;
     private final MutableLiveData<List<Category>> allCategory;
     private final MutableLiveData<List<Product>> allProduct;
+    private final MutableLiveData<List<BasketProduct>> allProductBasket;
+
+    public MutableLiveData<List<BasketProduct>> getAllProductBasket() {
+        return allProductBasket;
+    }
 
     public AppRepository() {
         mAuth = FirebaseAuth.getInstance();
@@ -86,6 +92,7 @@ public class AppRepository {
         msg = new MutableLiveData<>();
         allCategory = new CategoryLiveData();
         allProduct = new AllProductLiveData();
+        allProductBasket = new BasketLiveData();
     }
 
     public MutableLiveData<List<News>> getAllNews() {
@@ -231,7 +238,7 @@ public class AppRepository {
                 );
     }
 
-    public void insertProductBasket(String productId, String productCount, String productMaxCount, OnSuccessListener<? super Void> onSuccess) {
+    public void insertProductBasket2(String productId, String productCount, String productMaxCount, OnSuccessListener<? super Void> onSuccess) {
         String idBasket = mReference.push().getKey();
         HashMap<String, Object> mapBasket = new HashMap<>();
         mapBasket.put(BASKET_ID, idBasket);
@@ -304,6 +311,59 @@ public class AppRepository {
                             }
                         }
                 );
+    }
+
+    public void insertProductBasket(String productId, String productCount, String productMaxCount, OnSuccessListener<? super Void> onSuccess) {
+        String idBasket = mReference.push().getKey();
+        HashMap<String, Object> mapBasket = new HashMap<>();
+        mapBasket.put(BASKET_ID, idBasket);
+        mapBasket.put(BASKET_PRODUCT, productId);
+        mapBasket.put(BASKET_PRODUCT_COUNT, productCount);
+        mapBasket.put(BASKET_USER, UID);
+
+        //TODO: NUllPOINTEREXCEPTION
+        mReference.child(NODE_BASKET).get().addOnSuccessListener(
+                snapshot -> {
+                    Boolean found = false;
+                    for (DataSnapshot item : snapshot.getChildren()) {
+                        if (item.getValue(Basket.class).basket_product.equals(productId) && item.getValue(Basket.class).basket_user.equals(UID)) {
+                            if (item.getValue(Basket.class).basket_product.equals(productId)) {
+                                int countItem = 0;
+                                countItem = Integer.parseInt(productCount) + Integer.parseInt(item.getValue(Basket.class).basket_product_count);
+                                if (countItem > Integer.parseInt(productMaxCount))
+                                    countItem = Integer.parseInt(productMaxCount);
+
+                                mapBasket.put(BASKET_ID, item.getKey());
+                                mapBasket.put(BASKET_PRODUCT_COUNT, String.valueOf(countItem));
+                                item.getRef().updateChildren(mapBasket).addOnFailureListener(
+                                        e -> Log.d(TAG, e.getMessage())
+                                ).addOnSuccessListener(onSuccess);
+                                found = true;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        mReference.child(NODE_BASKET).child(idBasket).updateChildren(mapBasket).addOnSuccessListener(onSuccess);
+                    }
+                }
+        );
+    }
+
+    public void updateProductBasket(Product product, Basket basket, String countProduct) {
+
+        HashMap<String, Object> mapBasket = new HashMap<>();
+        mapBasket.put(BASKET_ID, basket.basket_id);
+        mapBasket.put(BASKET_PRODUCT, product.product_id);
+        mapBasket.put(BASKET_PRODUCT_COUNT, countProduct);
+        mapBasket.put(BASKET_USER, UID);
+        mReference.child(NODE_BASKET).child(basket.basket_id).updateChildren(mapBasket).addOnSuccessListener(
+                unused -> Log.d(TAG, "Success")
+        );
+
+    }
+
+    public void deleteProductBasket(Basket basket, OnSuccessListener<? super Void> onSuccess) {
+        mReference.child(NODE_BASKET).child(basket.basket_id).removeValue().addOnSuccessListener(onSuccess);
     }
 
     public void deleteNews(News news, OnCompleteListener<Void> OnComplete) {

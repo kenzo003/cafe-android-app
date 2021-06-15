@@ -14,8 +14,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/fnc_rel_frame"
@@ -54,10 +53,13 @@
                     android:layout_height="30dp"
                     android:layout_alignStart="@id/ni_txt_V_title"
                     android:layout_alignTop="@id/ni_layoutDat"
-                    android:layout_alignEnd="@id/ni_layoutDat"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="-2dp"
                     android:background="@android:color/transparent"
                     android:ellipsize="end"
                     android:gravity="start"
+                    android:textAllCaps="false"
                     android:maxLines="1"
                     android:padding="0dp"
                     android:singleLine="true"
@@ -78,11 +80,11 @@
                     android:padding="5dp">
 
                     <ImageView
-                        android:contentDescription="@string/todo"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
+                        android:contentDescription="@string/todo"
                         android:src="@drawable/ic_date" />
 
                     <TextView
@@ -106,7 +108,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="16dp"
                     android:fontFamily="sans-serif-light"
-                    android:textAlignment="center"
+                    android:textAlignment="textStart"
                     android:textColor="@android:color/background_dark"
                     android:textSize="17sp"
                     android:textStyle="bold" />

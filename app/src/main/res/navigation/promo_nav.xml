@@ -9,6 +9,6 @@
     <fragment
         android:id="@+id/promoFragment"
         android:name="com.example.cafe.screens.promo.PromoFragment"
-        android:label="fragment_promo"
+        android:label="Акции"
         tools:layout="@layout/fragment_promo" />
 </navigation>

@@ -74,7 +74,7 @@ public class CatalogFragment extends Fragment {
                     if (product != null) {
                         //Передаем модель и переходим к карточке новости
                         mViewModel.insertProductBasket(product.product_id, "1", product.product_quantity,
-                                unused -> Snackbar.make(requireContext(), mBinding.getRoot(), "Товар добавлен в корзину", Snackbar.LENGTH_LONG).show());
+                                unused -> Snackbar.make(requireContext(), mBinding.getRoot(), "Товар добавлен в корзину", Snackbar.LENGTH_SHORT).show());
                     }
                 }
         );

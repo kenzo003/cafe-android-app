@@ -13,7 +13,9 @@
         tools:layout="Новости" >
         <action
             android:id="@+id/action_newsFragment2_to_newsCardFragment"
-            app:destination="@id/newsCardFragment" />
+            app:destination="@id/newsCardFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/newsCardFragment"

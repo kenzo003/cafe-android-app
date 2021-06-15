@@ -115,7 +115,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
             name = itemView.findViewById(R.id.ci_txt_v_product_name);
             price = itemView.findViewById(R.id.ci_txt_v_product_price);
             addFavorite = itemView.findViewById(R.id.ci_btn_product_favorite_add);
-            addBasket = itemView.findViewById(R.id.ci_btn_product_basket_add);
+            addBasket = itemView.findViewById(R.id.fp_btn_product_delete);
 
             itemView.setOnClickListener(this);
             addFavorite.setOnClickListener(this::onFavoriteClick);

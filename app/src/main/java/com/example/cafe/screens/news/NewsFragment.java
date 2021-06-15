@@ -88,9 +88,7 @@ public class NewsFragment extends Fragment {
                     News news = adapter.getNews(position);
                     if (news != null) {
                         mViewModel.deleteNews(adapter.getNews(position), null);
-                        adapter.delNews(position);
                     }
-
                 }
         );
         observerNews = news -> adapter.setNews(news);
@@ -105,4 +103,8 @@ public class NewsFragment extends Fragment {
         observerNews = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

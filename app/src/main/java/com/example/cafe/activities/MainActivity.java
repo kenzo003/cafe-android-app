@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
                     hideToolbarAndNavBar();
                     break;
                 }
+                case R.id.basketFragment2:{
+                    mToolbar.setVisibility(View.GONE);
+                    break;
+                }
                 default:
                     mToolbar.setVisibility(View.VISIBLE);
                     mBottomNavigation.setVisibility(View.VISIBLE);

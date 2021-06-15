@@ -63,6 +63,10 @@ public class NewsLiveData extends MutableLiveData<List<News>> {
                             );
                         }
                     }
+                }else {
+                    //Здесь удаляется последний элемент
+                    news.clear();
+                    postValue(news);
                 }
             } catch (Exception exception) {
                 Log.d(constants.TAG, exception.getMessage());
@@ -107,7 +111,7 @@ public class NewsLiveData extends MutableLiveData<List<News>> {
 
         @Override
         public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-
+            Log.d(constants.TAG, snapshot.getKey());
         }
 
         @Override
