@@ -16,6 +16,7 @@ import com.example.cafe.models.NewsUser;
 import com.example.cafe.models.Product;
 import com.example.cafe.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -191,6 +192,12 @@ public class AppRepository {
                     }
                 }
         );
+    }
+
+    public void signInWithCredential(String id, String smsCode, OnCompleteListener<AuthResult> onComplete, OnFailureListener onFailure) {
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(id, smsCode);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(onComplete)
+        .addOnFailureListener(onFailure);
     }
 
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {

@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.cafe.database.firebase.AppRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -41,6 +42,9 @@ public class UserViewModel extends AndroidViewModel {
         repository.signInWithCredential(id, smsCode);
     }
 
+    public void signInWithCredential(String id, String smsCode, OnCompleteListener<AuthResult> onComplete, OnFailureListener onFailure){
+        repository.signInWithCredential(id, smsCode, onComplete, onFailure);
+    }
     public void signOut() {
         repository.signOut();
     }

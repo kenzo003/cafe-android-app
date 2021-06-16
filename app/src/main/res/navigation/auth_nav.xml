@@ -14,21 +14,16 @@
             android:id="@+id/action_authFragment2_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_authFragment2_to_enterPinFragment2"
-            app:destination="@id/enterPinFragment2" />
+            android:id="@+id/action_authFragment2_to_signInPhoneFragment"
+            app:destination="@id/signInPhoneFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.cafe.screens.auth.LoginFragment"
         android:label="login_fragment"
-        tools:layout="@layout/login_fragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_enterPinFragment2"
-            app:destination="@id/enterPinFragment2" />
-    </fragment>
+        tools:layout="@layout/login_fragment" />
     <fragment
-        android:id="@+id/enterPinFragment2"
-        android:name="com.example.cafe.screens.auth.EnterPinFragment"
-        android:label="enter_pin_fragment"
-        tools:layout="@layout/enter_pin_fragment" />
+        android:id="@+id/signInPhoneFragment"
+        android:name="com.example.cafe.screens.auth.SignInPhoneFragment"
+        android:label="SignInPhoneFragment" />
 </navigation>

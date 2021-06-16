@@ -59,14 +59,13 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             switch (navDestination.getId()) {
                 case R.id.authFragment2:
-                case R.id.enterPinFragment2:
                 case R.id.loginFragment:
                 case R.id.productFragment:
-                 {
+                case R.id.signInPhoneFragment: {
                     hideToolbarAndNavBar();
                     break;
                 }
-                case R.id.basketFragment2:{
+                case R.id.basketFragment2: {
                     mToolbar.setVisibility(View.GONE);
                     mBottomNavigation.setVisibility(View.VISIBLE);
                     break;

@@ -6,6 +6,7 @@
         <item name="android:colorControlNormal">@color/colorSurface</item>
     </style>
 
+
     <!--    EditText для AuthFragment-->
     <style name="Theme.Cafe.EditText">
         <item name="android:layout_marginTop">6dp</item>

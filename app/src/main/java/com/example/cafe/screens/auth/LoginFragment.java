@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.cafe.R;
 import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.LoginFragmentBinding;
 import com.example.cafe.utilits.constants;
@@ -107,7 +106,7 @@ public class LoginFragment extends Fragment {
                                                 super.onCodeSent(id, forceResendingToken);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("id", id);
-                                                ((MainActivity) requireActivity()).navController.navigate(R.id.action_loginFragment_to_enterPinFragment2, bundle);
+//                                                ((MainActivity) requireActivity()).navController.navigate(R.id.action_loginFragment_to_enterPinFragment2, bundle);
                                             }
                                         });
                             }

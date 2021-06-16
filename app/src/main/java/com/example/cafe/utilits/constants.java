@@ -8,6 +8,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class constants {
     public static final String VISIBLE = "VISIBLE";
+    public static final String OTP_ID = "OTP_ID";
+    public static final String TOKEN = "TOKEN";
     //CuRRent
     public static String CURRENT_CATEGORY_ID = "";
     public static final String ID_CUSTOMER = "zYIxy03gxtajuqUKtnmUidQOJ0A2";

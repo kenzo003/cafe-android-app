@@ -4,7 +4,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSurface">@color/colorSurface</item>
         <item name="toolbarStyle">@style/Theme.Cafe.Toolbar</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorControlNormal">@color/colorSurface</item>
 
         <!-- Status bar color. -->
