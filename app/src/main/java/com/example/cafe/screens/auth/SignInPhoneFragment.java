@@ -72,7 +72,7 @@ public class SignInPhoneFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sms = mBinding.afEditTxtPassword.getText().toString();
+                        sms = mBinding.fpEditSms.getText().toString();
                         hideSoftKeyboard(getActivity());
                         if (!id.isEmpty() && !sms.isEmpty())
                             mBinding.fpProgressBar.setVisibility(View.VISIBLE);
@@ -105,7 +105,7 @@ public class SignInPhoneFragment extends Fragment {
                     public void onClick(View v) {
 
                         mBinding.fpProgressBar.setVisibility(View.VISIBLE);
-                        phone = mBinding.fpPhoneNumber.getText().toString();
+                        phone = mBinding.fpEditPhone.getText().toString();
                         hideSoftKeyboard(getActivity());
 
                         if (true) {
@@ -167,16 +167,16 @@ public class SignInPhoneFragment extends Fragment {
     }
 
     private void show() {
-        mBinding.afEditTxtPassword.setVisibility(View.VISIBLE);
-        mBinding.fpPhoneNumber.setVisibility(View.GONE);
+        mBinding.fpEditSms.setVisibility(View.VISIBLE);
+        mBinding.fpEditPhone.setVisibility(View.GONE);
         mBinding.queryCode.setVisibility(View.GONE);
         mBinding.fpLogin.setVisibility(View.VISIBLE);
         mBinding.fpPanelRepeat.setVisibility(View.VISIBLE);
     }
 
     private void hide() {
-        mBinding.afEditTxtPassword.setVisibility(View.GONE);
-        mBinding.fpPhoneNumber.setVisibility(View.VISIBLE);
+        mBinding.fpEditSms.setVisibility(View.GONE);
+        mBinding.fpEditPhone.setVisibility(View.VISIBLE);
         mBinding.queryCode.setVisibility(View.VISIBLE);
         mBinding.fpLogin.setVisibility(View.GONE);
         mBinding.fpPanelRepeat.setVisibility(View.GONE);

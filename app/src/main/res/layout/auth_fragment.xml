@@ -41,7 +41,7 @@
             style="@style/Theme.Cafe.AuthTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Моя кофейня"
+            android:text="Название кофейни"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,35 +56,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lf_CL_header_auth">
 
-        <EditText
-            android:id="@+id/fp_phone_number"
-            style="@style/Theme.Cafe.EditText"
+        <Button
+            android:id="@+id/af_btn_login_email"
+            style="@style/Theme.Cafe.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-
-            app:layout_constraintBottom_toTopOf="@id/af_edit_txt_password"
+            android:text="Войти по Email"
+            app:layout_constraintBottom_toTopOf="@id/af_btn_login_phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <EditText
-            android:id="@+id/af_edit_txt_password"
-            style="@style/Theme.Cafe.EditText"
+        <Button
+            android:id="@+id/af_btn_login_phone"
+            style="@style/Theme.Cafe.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-
+            android:text="Войти по номеру телефона"
+            android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@id/query_code"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fp_phone_number" />
+            app:layout_constraintTop_toBottomOf="@id/af_btn_login_email" />
 
         <Button
             android:id="@+id/query_code"
@@ -92,10 +88,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/login"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/af_txt_v_or"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/af_edit_txt_password" />
+            app:layout_constraintTop_toBottomOf="@id/af_btn_login_phone" />
 
         <TextView
             android:id="@+id/af_txt_v_or"
@@ -121,6 +118,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/af_txt_v_or" />
+
+        <Button
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/af_btn_signup"
+            app:layout_constraintStart_toStartOf="@id/af_btn_signup"
+            app:layout_constraintEnd_toEndOf="@id/af_btn_signup"
+            android:text="Забыли пароль?"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@id/lf_CL_header_auth">
 
         <EditText
-            android:id="@+id/fp_phone_number"
+            android:id="@+id/fp_edit_phone"
             style="@style/Theme.Cafe.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:inputType="phone"
             android:textAlignment="center"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/af_edit_txt_password"
+            app:layout_constraintBottom_toTopOf="@id/fp_edit_sms"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -56,7 +56,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
         <EditText
-            android:id="@+id/af_edit_txt_password"
+            android:id="@+id/fp_edit_sms"
             style="@style/Theme.Cafe.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             app:layout_constraintBottom_toTopOf="@id/query_code"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fp_phone_number" />
+            app:layout_constraintTop_toBottomOf="@id/fp_edit_phone" />
 
         <Button
             android:id="@+id/query_code"
@@ -83,7 +83,7 @@
             app:layout_constraintBottom_toTopOf="@id/fp_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/af_edit_txt_password" />
+            app:layout_constraintTop_toBottomOf="@id/fp_edit_sms" />
 
         <Button
             android:id="@+id/fp_login"

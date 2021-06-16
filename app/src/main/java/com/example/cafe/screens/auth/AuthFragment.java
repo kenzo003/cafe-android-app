@@ -24,6 +24,7 @@ public class AuthFragment extends Fragment {
     private NavController navController;
     private MainActivity activity;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
+
     @Override
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -48,12 +49,14 @@ public class AuthFragment extends Fragment {
                         }
                     }
                 });
+        mBinding.afBtnLoginPhone.setOnClickListener(
+                v -> activity.navController.navigate(R.id.action_authFragment2_to_signInPhoneFragment)
+        );
 
         mBinding.afBtnSignup.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        activity.navController.navigate(R.id.action_authFragment2_to_signInPhoneFragment);
                     }
                 }
         );
