@@ -119,19 +119,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/af_txt_v_or" />
 
-        <Button
-            android:textColor="@color/colorPrimary"
-            android:textSize="15sp"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:textAllCaps="false"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@id/af_btn_signup"
-            app:layout_constraintStart_toStartOf="@id/af_btn_signup"
-            app:layout_constraintEnd_toEndOf="@id/af_btn_signup"
-            android:text="Забыли пароль?"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

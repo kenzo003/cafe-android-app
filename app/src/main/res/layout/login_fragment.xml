@@ -6,41 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".screens.auth.LoginFragment">
 
-
-    <View
-        android:tag="decoration"
-        android:id="@+id/shape"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:background="@drawable/shape"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/lf_txt_v_check_in_title"
-        style="@style/Theme.Cafe.AuthTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check_in"
-
-        app:layout_constraintBottom_toBottomOf="@+id/shape"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/lg_LL_case_fields"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:windowSoftInputMode="stateVisible|adjustResize"
-
         app:layout_constraintBottom_toTopOf="@id/lf_btn_signup_enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shape">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <EditText
+            android:id="@+id/lf_edit_txt_phone_number"
+            style="@style/Theme.Cafe.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/phone_number"
+            android:hint="@string/phone_number"
+            android:inputType="phone" />
 
         <EditText
             android:id="@+id/lf_edit_txt_name"
@@ -78,33 +63,6 @@
             android:hint="@string/city"
             android:inputType="text" />
 
-        <EditText
-            android:id="@+id/lf_edit_txt_phone_number"
-            style="@style/Theme.Cafe.EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/phone_number"
-            android:hint="@string/phone_number"
-            android:inputType="phone" />
-
-        <EditText
-            android:id="@+id/lf_edit_txt_email"
-            style="@style/Theme.Cafe.EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/email"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/lf_edit_txt_password"
-            style="@style/Theme.Cafe.EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=" "
-            android:hint="@string/password"
-            android:inputType="textPassword" />
-
         <RadioGroup
             android:id="@+id/lf_edit_txt_gender"
             android:layout_width="match_parent"
@@ -131,16 +89,90 @@
 
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/lf_edit_code"
+        style="@style/Theme.Cafe.EditText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:hint="Код из СМС"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:visibility="gone"
+
+        app:layout_constraintBottom_toTopOf="@id/lf_panel_repeat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lg_LL_case_fields" />
+
+
+    <LinearLayout
+        android:id="@+id/lf_panel_repeat"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/lf_btn_signup_enter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lf_edit_code">
+
+        <Button
+            android:id="@+id/lf_btn_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Перезапросить код"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/lf_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="20"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/lf_btn_signup_enter"
         style="@style/Theme.Cafe.Button"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/register"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lg_LL_case_fields" />
+
+    <Button
+        android:id="@+id/lf_btn_query_code"
+        style="@style/Theme.Cafe.Button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Запросить код"
+        android:visibility="visible"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lg_LL_case_fields" />
+
+    <ProgressBar
+        android:theme="@style/Theme.Cafe"
+        android:id="@+id/fp_progress_bar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/lg_LL_case_fields"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

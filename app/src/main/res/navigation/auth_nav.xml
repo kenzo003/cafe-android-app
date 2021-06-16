@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_authFragment2_to_signInPhoneFragment"
             app:destination="@id/signInPhoneFragment" />
+        <action
+            android:id="@+id/action_authFragment2_to_signInEmailFragment"
+            app:destination="@id/signInEmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -26,4 +29,8 @@
         android:id="@+id/signInPhoneFragment"
         android:name="com.example.cafe.screens.auth.SignInPhoneFragment"
         android:label="SignInPhoneFragment" />
+    <fragment
+        android:id="@+id/signInEmailFragment"
+        android:name="com.example.cafe.screens.auth.SignInEmailFragment"
+        android:label="SignInEmailFragment" />
 </navigation>

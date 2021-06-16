@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.authFragment2:
                 case R.id.loginFragment:
                 case R.id.productFragment:
+                case R.id.signInEmailFragment:
                 case R.id.signInPhoneFragment: {
                     hideToolbarAndNavBar();
                     break;

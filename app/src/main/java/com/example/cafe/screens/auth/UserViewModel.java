@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.cafe.database.firebase.AppRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -34,8 +35,12 @@ public class UserViewModel extends AndroidViewModel {
         repository.verificationSMS(phone_number, typeRequest, activity, onCodeSent);
     }
 
-    public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
-        repository.signupUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id, onComplete);
+//    public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
+//        repository.signupUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id, onComplete);
+//    }
+
+    public void insertUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnSuccessListener onSuccessListener, OnFailureListener onFailureListener){
+        repository.insertUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id, onSuccessListener, onFailureListener);
     }
 
     public void signInWithCredential(String id, String smsCode) {
@@ -49,13 +54,18 @@ public class UserViewModel extends AndroidViewModel {
         repository.signOut();
     }
 
-    public void loginUser(String email_address, String password, OnCompleteListener<AuthResult> onComplete) {
-        repository.loginUser(email_address, password, onComplete);
+    public void loginUser(String email_address, String password, OnCompleteListener<AuthResult> onComplete, OnFailureListener onFailed) {
+        repository.loginUser(email_address, password, onComplete, onFailed);
     }
 
     public void updatePhoneNumber(String id, String smsCode, String typeRequest, OnCompleteListener<Void> onComplete) {
         repository.updatePhoneNumber(id, smsCode, typeRequest, onComplete);
     }
+
+    public void sendPasswordResetEmail(String email, OnSuccessListener<? super Void> onSuccess){
+        repository.sendPasswordResetEmail(email, onSuccess);
+    }
+
 
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return userMutableLiveData;

@@ -49,16 +49,17 @@ public class AuthFragment extends Fragment {
                         }
                     }
                 });
+
+        mBinding.afBtnLoginEmail.setOnClickListener(
+                v -> activity.navController.navigate(R.id.action_authFragment2_to_signInEmailFragment)
+        );
         mBinding.afBtnLoginPhone.setOnClickListener(
                 v -> activity.navController.navigate(R.id.action_authFragment2_to_signInPhoneFragment)
         );
 
         mBinding.afBtnSignup.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                }
+                v -> activity.navController.navigate(R.id.action_authFragment2_to_loginFragment)
+
         );
     }
 

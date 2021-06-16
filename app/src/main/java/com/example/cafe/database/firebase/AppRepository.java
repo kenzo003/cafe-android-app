@@ -38,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.cafe.utilits.constants.BASKET_ID;
@@ -118,30 +117,36 @@ public class AppRepository {
         return allProduct;
     }
 
-
-    public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
-        mAuth.createUserWithEmailAndPassword(email_address, password)
-                .addOnCompleteListener(onComplete)
-                .addOnSuccessListener(
-                        authResult -> insertUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id)
-                )
-                .addOnFailureListener(
-                        e -> {
-                            Log.d(TAG, e.getMessage());
-                            msg.postValue(e.getMessage());
-                        }
-                );
+    public void sendPasswordResetEmail(String email, OnSuccessListener<? super Void> onSuccess) {
+        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(onSuccess).addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+                        Log.d(TAG, e.getMessage());
+                        msg.postValue(e.getMessage());
+                    }
+                }
+        );
     }
 
-    public void loginUser(String email_address, String password, OnCompleteListener<AuthResult> onComplete) {
+//    public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
+//        mAuth.createUserWithEmailAndPassword(email_address, password)
+//                .addOnCompleteListener(onComplete)
+//                .addOnSuccessListener(
+//                        authResult -> insertUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id)
+//                )
+//                .addOnFailureListener(
+//                        e -> {
+//                            Log.d(TAG, e.getMessage());
+//                            msg.postValue(e.getMessage());
+//                        }
+//                );
+//    }
+
+    public void loginUser(String email_address, String password, OnCompleteListener<AuthResult> onComplete, OnFailureListener onFailed) {
         mAuth.signInWithEmailAndPassword(email_address, password)
                 .addOnCompleteListener(onComplete)
-                .addOnFailureListener(
-                        e -> {
-                            Log.d(TAG, e.getMessage());
-                            msg.postValue(e.getMessage());
-                        }
-                );
+                .addOnFailureListener(onFailed);
     }
 
     public void updatePhoneNumber(String id, String smsCode, String typeRequest, OnCompleteListener<Void> onComplete) {
@@ -197,29 +202,34 @@ public class AppRepository {
     public void signInWithCredential(String id, String smsCode, OnCompleteListener<AuthResult> onComplete, OnFailureListener onFailure) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(id, smsCode);
         mAuth.signInWithCredential(credential).addOnCompleteListener(onComplete)
-        .addOnFailureListener(onFailure);
+                .addOnFailureListener(onFailure);
     }
 
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return userMutableLiveData;
     }
 
-    public void insertUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id) {
-        User user = new User(name, surname, email_address, phone_number, city, gender, birth_date, address);
+    public void insertUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnSuccessListener onSuccessListener, OnFailureListener onFailureListener) {
+        User user = new User(name, surname, "", phone_number, city, gender, birth_date, "");
 
-        mReference.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(user)
-                .addOnSuccessListener(
-                        unused -> {
-                            mAuth.getCurrentUser().getUid();
-                            String id = UUID.randomUUID().toString();
-                            mReference.child("CustomerUser").child(id).setValue(new CustomerUser(customer_id, mAuth.getCurrentUser().getUid()));
-                            Log.d(TAG, "Update data success");
-                        }
-                )
-                .addOnFailureListener(e -> {
-                    Log.d(TAG, e.getMessage());
-                    msg.postValue(e.getMessage());
-                });
+        if (mAuth.getCurrentUser() != null) {
+            mReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
+                    .addOnSuccessListener(
+                            unused -> {
+
+                                String id = customer_id;
+                                mReference.child("CustomerUser").child(customer_id).setValue(new CustomerUser(customer_id, mAuth.getCurrentUser().getUid()))
+                                        .addOnSuccessListener(onSuccessListener)
+                                        .addOnFailureListener(onFailureListener);
+                                Log.d(TAG, "Update data success");
+                            }
+                    )
+                    .addOnFailureListener(e -> {
+                        Log.d(TAG, e.getMessage());
+                        msg.postValue(e.getMessage());
+                    });
+        }
+
     }
 
 
@@ -254,6 +264,7 @@ public class AppRepository {
                         e -> Log.d(TAG, e.getMessage())
                 );
     }
+
 
     public void insertProductBasket2(String productId, String productCount, String productMaxCount, OnSuccessListener<? super Void> onSuccess) {
         String idBasket = mReference.push().getKey();
@@ -408,7 +419,7 @@ public class AppRepository {
                 );
     }
 
-    public void updateProductFavorite(Product product, OnSuccessListener<? super Void> onSuccess,OnSuccessListener<? super Void>  onDelete) {
+    public void updateProductFavorite(Product product, OnSuccessListener<? super Void> onSuccess, OnSuccessListener<? super Void> onDelete) {
         if (product != null) {
             String idFavorite = mReference.push().getKey();
             HashMap<String, Object> mapProduct = new HashMap<>();
