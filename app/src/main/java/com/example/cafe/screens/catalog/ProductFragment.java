@@ -2,14 +2,15 @@ package com.example.cafe.screens.catalog;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,11 +22,15 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.example.cafe.R;
 import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.FragmentProductBinding;
 import com.example.cafe.models.Product;
 import com.example.cafe.utilits.constants;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -64,6 +69,45 @@ public class ProductFragment extends Fragment {
                 mBinding.fpTxtVProductPrice.setText(product.product_price + " Р");
                 mBinding.fpTxtVProductCount.setText(String.valueOf(productCount));
 
+                mViewModel.isProductFavorite(product,
+                        new ValueEventListener() {
+                            @SuppressLint("UseCompatLoadingForDrawables")
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                if (snapshot.exists())
+                                    mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black));
+                                else
+                                    mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
+                            }
+
+                            @SuppressLint("UseCompatLoadingForDrawables")
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black));
+                            }
+                        });
+
+                mBinding.ciBtnProductFavoriteAdd.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mViewModel.insertProductFavorite(product,
+                                        new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black));
+                                            }
+                                        },
+                                        new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
+                                            }
+                                        });
+                            }
+                        }
+                );
+
                 mBinding.fpBtnPlus.setOnClickListener(v -> {
                     if (productCount < Integer.parseInt(product.product_quantity)) {
                         productCount++;
@@ -84,12 +128,16 @@ public class ProductFragment extends Fragment {
                     if (!product.product_id.isEmpty() && productCount > 0) { //TODO: Добавить проверку на количество товара
                         mViewModel.insertProductBasket(product.product_id, String.valueOf(productCount), product.product_quantity,
                                 unused -> {
-                                    Snackbar.make(requireContext(), mBinding.getRoot(), "Товар добавлен в корзину", Snackbar.LENGTH_SHORT).show();
+                                    Toast t = Toast.makeText(getContext(), "Товар добавлен в корзину", Toast.LENGTH_SHORT);
+                                    t.setGravity(Gravity.TOP, 10, 0);
+                                    t.show();
                                     productCount = 0;
                                     mBinding.fpTxtVProductCount.setText(String.valueOf(productCount));
                                 });
                     } else {
-                        Snackbar.make(requireActivity(), mBinding.getRoot(), "Количество товара не может быть равно 0", Snackbar.LENGTH_SHORT).show();
+                        Toast t = Toast.makeText(getContext(), "Количество товара не может быть равно 0", Toast.LENGTH_SHORT);
+                        t.setGravity(Gravity.TOP, 10, 0);
+                        t.show();
                     }
                 });
                 RequestOptions requestOptions = new RequestOptions();
@@ -122,10 +170,4 @@ public class ProductFragment extends Fragment {
         }
     }
 
-    private Bitmap pictureDrawableToBitmap(PictureDrawable pictureDrawable) {
-        Bitmap bmp = Bitmap.createBitmap(pictureDrawable.getIntrinsicWidth(), pictureDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bmp);
-        canvas.drawPicture(pictureDrawable.getPicture());
-        return bmp;
-    }
 }

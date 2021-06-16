@@ -11,6 +11,7 @@ import com.example.cafe.database.firebase.AppRepository;
 import com.example.cafe.models.Category;
 import com.example.cafe.models.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,5 +45,13 @@ public class CatalogViewModel extends AndroidViewModel {
 
     public void insertProductBasket(String productId, String productCount, String productMaxCount, OnSuccessListener<? super Void> onSuccess){
         repository.insertProductBasket(productId, productCount,productMaxCount, onSuccess);
+    }
+
+    public void insertProductFavorite(Product product, OnSuccessListener<? super Void> onSuccess, OnSuccessListener<? super Void> onDelete) {
+        repository.updateProductFavorite(product, onSuccess, onDelete);
+    }
+
+    public void isProductFavorite(Product product, ValueEventListener onComplete){
+        repository.isProductFavorite(product, onComplete);
     }
 }

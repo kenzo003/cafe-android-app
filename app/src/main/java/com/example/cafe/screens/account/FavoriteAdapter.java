@@ -1,4 +1,4 @@
-package com.example.cafe.screens.catalog;
+package com.example.cafe.screens.account;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,33 +19,26 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cafe.R;
 import com.example.cafe.models.Product;
 import com.example.cafe.utilits.Utils;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogViewHolder> {
-
+public class FavoriteAdapter  extends RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>{
 
     private List<Product> products;
     private OnItemClickListener OnItemClickListener;
     private OnItemClickListener OnItemBasketClickListener;
     private OnItemClickListener OnItemFavoriteClickListener;
     private final Context context;
-    private CatalogViewModel catalogViewModel;
 
 
-    public CatalogAdapter(List<Product> products, Context context, CatalogViewModel model) {
-        catalogViewModel = model;
+    public FavoriteAdapter(List<Product> products, Context context) {
         this.products = products;
         this.context = context;
     }
 
-
-    public void setCatalog(List<Product> products) {
+    public void setFavorite(List<Product> products) {
         if (products != null)
             this.products = products;
         notifyDataSetChanged();
@@ -61,14 +54,14 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
     @NonNull
     @NotNull
     @Override
-    public CatalogAdapter.CatalogViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.catalog_item, parent, false);
-        return new CatalogAdapter.CatalogViewHolder(view);
+    public FavoriteAdapter.FavoriteViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_item, parent, false);
+        return new FavoriteAdapter.FavoriteViewHolder(view);
     }
 
     @SuppressLint("CheckResult")
     @Override
-    public void onBindViewHolder(@NonNull @NotNull CatalogAdapter.CatalogViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull FavoriteAdapter.FavoriteViewHolder holder, int position) {
         Product model = products.get(position);
         holder.bind(model);
 
@@ -84,21 +77,6 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.logo);
 
-        catalogViewModel.isProductFavorite(model,
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        if (snapshot.exists())
-                        holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite_black));
-                        else
-                            holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                        holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
-                    }
-                });
     }
 
     @Override
@@ -109,19 +87,21 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
             return 0;
     }
 
-    public void setOnCatalogClickListener(CatalogAdapter.OnItemClickListener onCatalogClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onCatalogClickListener) {
         this.OnItemClickListener = onCatalogClickListener;
     }
 
-    public void setOnBasketClickListener(CatalogAdapter.OnItemClickListener onBasketClickListener) {
+    public void setOnBasketClickListener(OnItemClickListener onBasketClickListener) {
         this.OnItemBasketClickListener = onBasketClickListener;
     }
 
-    public void setOnFavoriteClickListener(CatalogAdapter.OnItemClickListener onFavoriteClickListener) {
+    public void setOnFavoriteClickListener(OnItemClickListener onFavoriteClickListener) {
         this.OnItemFavoriteClickListener = onFavoriteClickListener;
     }
 
-    final class CatalogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
+    final class FavoriteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView logo;
         private final TextView name;
         private final TextView price;
@@ -130,12 +110,12 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
 
 
         //TODO: Здесь добавить событе клика по корзине
-        public CatalogViewHolder(@NonNull @NotNull View itemView) {
+        public FavoriteViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            logo = itemView.findViewById(R.id.ci_img_v_product_logo);
-            name = itemView.findViewById(R.id.ci_txt_v_product_name);
+            logo = itemView.findViewById(R.id.fi_img_v_product_logo);
+            name = itemView.findViewById(R.id.fi_txt_v_product_name);
             price = itemView.findViewById(R.id.fi_txt_v_product_price);
-            addFavorite = itemView.findViewById(R.id.ci_btn_product_favorite_add);
+            addFavorite = itemView.findViewById(R.id.fi_btn_product_favorite_add);
             addBasket = itemView.findViewById(R.id.fi_btn_product_delete);
 
             itemView.setOnClickListener(this);
@@ -150,21 +130,20 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
         }
 
         private void onBasketClick(View view) {
-            OnItemBasketClickListener.onNewsClick(view, getAbsoluteAdapterPosition());
+            OnItemBasketClickListener.onItemClick(view, getAbsoluteAdapterPosition());
         }
 
         private void onFavoriteClick(View view) {
-            OnItemFavoriteClickListener.onNewsClick(view, getAbsoluteAdapterPosition());
+            OnItemFavoriteClickListener.onItemClick(view, getAbsoluteAdapterPosition());
         }
 
         @Override
         public void onClick(View v) {
-            OnItemClickListener.onNewsClick(v, getAbsoluteAdapterPosition());
+            OnItemClickListener.onItemClick(v, getAbsoluteAdapterPosition());
         }
     }
 
     interface OnItemClickListener {
-        void onNewsClick(View view, int position);
+        void onItemClick(View view, int position);
     }
-
 }

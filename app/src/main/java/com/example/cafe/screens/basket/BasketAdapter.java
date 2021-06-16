@@ -19,6 +19,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cafe.R;
 import com.example.cafe.models.BasketProduct;
 import com.example.cafe.utilits.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,11 +36,13 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
     private OnItemClickListener OnItemPlusClickListener;
     private final Context context;
     private String priceBasket;
+    private BasketViewModel basketViewModel;
 
-    public BasketAdapter(List<BasketProduct> basketProducts, Context context) {
+    public BasketAdapter(List<BasketProduct> basketProducts, Context context, BasketViewModel basketViewModel) {
         this.priceBasket = "0";
         this.basketProducts = basketProducts;
         this.context = context;
+        this.basketViewModel = basketViewModel;
     }
 
     public void setBasket(List<BasketProduct> basketProducts) {
@@ -75,6 +80,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
         BasketProduct model = basketProducts.get(position);
         holder.bind(model);
 
+
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.centerCrop();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());
@@ -86,6 +92,22 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
                 .apply(requestOptions)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.logo);
+
+        basketViewModel.isProductFavorite(model.getProduct(),
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        if (snapshot.exists())
+                            holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite_black));
+                        else
+                            holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                        holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
+                    }
+                });
 
     }
 
@@ -141,12 +163,12 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
         //TODO: Здесь добавить событе клика по корзине
         public BasketViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            logo = itemView.findViewById(R.id.fp_img_v_product_logo);
-            name = itemView.findViewById(R.id.fp_txt_v_product_name);
+            logo = itemView.findViewById(R.id.fi_img_v_product_logo);
+            name = itemView.findViewById(R.id.fi_txt_v_product_name);
             count = itemView.findViewById(R.id.fp_txt_v_product_count);
             price = itemView.findViewById(R.id.fp_txt_v_product_price);
-            addFavorite = itemView.findViewById(R.id.fp_btn_product_favorite_add);
-            delBasket = itemView.findViewById(R.id.fp_btn_product_delete);
+            addFavorite = itemView.findViewById(R.id.fi_btn_product_favorite_add);
+            delBasket = itemView.findViewById(R.id.fi_btn_product_delete);
             btnMinus = itemView.findViewById(R.id.fp_btn_minus);
             btnPlus = itemView.findViewById(R.id.fp_btn_plus);
 

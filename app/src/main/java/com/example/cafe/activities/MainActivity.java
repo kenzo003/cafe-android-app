@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 case R.id.basketFragment2:{
                     mToolbar.setVisibility(View.GONE);
+                    mBottomNavigation.setVisibility(View.VISIBLE);
                     break;
                 }
                 default:

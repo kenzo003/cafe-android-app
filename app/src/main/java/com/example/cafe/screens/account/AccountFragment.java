@@ -42,6 +42,10 @@ public class AccountFragment extends Fragment {
                     }
                 }
         );
+        
+        mBinding.afBtnFavorite.setOnClickListener(
+                v -> ((MainActivity)getActivity()).navController.navigate(R.id.action_accountFragment_to_favoriteFragment)
+        );
 
     }
 }

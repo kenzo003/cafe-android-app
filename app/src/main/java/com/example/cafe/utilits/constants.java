@@ -70,6 +70,13 @@ public class constants {
     public static final String BASKET_PRODUCT = "basket_product";
     public static final String BASKET_PRODUCT_COUNT = "basket_product_count";
 
+    //Favorite
+    public static final String NODE_FAVORITE = "favorite";
+    public static final String FAVORITE_ID = "favorite_id";
+    public static final String FAVORITE_PRODUCT = "favorite_product";
+    public static final String FAVORITE_USER = "favorite_user";
+
+
 
 
 

@@ -10,6 +10,7 @@ import com.example.cafe.models.Basket;
 import com.example.cafe.models.BasketProduct;
 import com.example.cafe.models.Category;
 import com.example.cafe.models.CustomerUser;
+import com.example.cafe.models.Favorite;
 import com.example.cafe.models.News;
 import com.example.cafe.models.NewsUser;
 import com.example.cafe.models.Product;
@@ -43,7 +44,11 @@ import static com.example.cafe.utilits.constants.BASKET_ID;
 import static com.example.cafe.utilits.constants.BASKET_PRODUCT;
 import static com.example.cafe.utilits.constants.BASKET_PRODUCT_COUNT;
 import static com.example.cafe.utilits.constants.BASKET_USER;
+import static com.example.cafe.utilits.constants.FAVORITE_ID;
+import static com.example.cafe.utilits.constants.FAVORITE_PRODUCT;
+import static com.example.cafe.utilits.constants.FAVORITE_USER;
 import static com.example.cafe.utilits.constants.NODE_BASKET;
+import static com.example.cafe.utilits.constants.NODE_FAVORITE;
 import static com.example.cafe.utilits.constants.NODE_NEWS_USERS;
 import static com.example.cafe.utilits.constants.NODE_PRODUCT;
 import static com.example.cafe.utilits.constants.PRODUCT_CATEGORY;
@@ -56,7 +61,6 @@ import static com.example.cafe.utilits.constants.PRODUCT_PRICE;
 import static com.example.cafe.utilits.constants.PRODUCT_QUANTITY;
 import static com.example.cafe.utilits.constants.PRODUCT_UNIT;
 import static com.example.cafe.utilits.constants.PRODUCT_VISIBILITY;
-import static com.example.cafe.utilits.constants.STORAGE_NODE_NEWS;
 import static com.example.cafe.utilits.constants.TAG;
 import static com.example.cafe.utilits.constants.USER_ID;
 import static com.example.cafe.utilits.constants.VER_CUR_USER;
@@ -74,10 +78,15 @@ public class AppRepository {
     private final MutableLiveData<String> msg;
     private final MutableLiveData<List<Category>> allCategory;
     private final MutableLiveData<List<Product>> allProduct;
+    private final MutableLiveData<List<Product>> allProductFavorite;
     private final MutableLiveData<List<BasketProduct>> allProductBasket;
 
     public MutableLiveData<List<BasketProduct>> getAllProductBasket() {
         return allProductBasket;
+    }
+
+    public MutableLiveData<List<Product>> getAllProductFavorite() {
+        return allProductFavorite;
     }
 
     public AppRepository() {
@@ -93,6 +102,7 @@ public class AppRepository {
         allCategory = new CategoryLiveData();
         allProduct = new AllProductLiveData();
         allProductBasket = new BasketLiveData();
+        allProductFavorite = new FavoriteLiveData();
     }
 
     public MutableLiveData<List<News>> getAllNews() {
@@ -391,12 +401,47 @@ public class AppRepository {
                 );
     }
 
-    public void getImage(String url) {
-        storageRef.child(STORAGE_NODE_NEWS + url).getBytes(1024 * 1024)
-                .addOnSuccessListener(
-                        bytes -> {
+    public void updateProductFavorite(Product product, OnSuccessListener<? super Void> onSuccess,OnSuccessListener<? super Void>  onDelete) {
+        if (product != null) {
+            String idFavorite = mReference.push().getKey();
+            HashMap<String, Object> mapProduct = new HashMap<>();
+            mapProduct.put(FAVORITE_ID, idFavorite);
+            mapProduct.put(FAVORITE_PRODUCT, product.product_id);
+            mapProduct.put(FAVORITE_USER, UID);
 
+            mReference.child(NODE_FAVORITE).get().addOnSuccessListener(
+                    new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot snapshot) {
+                            Boolean found = false;
+                            if (snapshot.exists()) {
+                                for (DataSnapshot item : snapshot.getChildren()) {
+                                    Favorite favorite = item.getValue(Favorite.class);
+                                    if (favorite.favorite_product.equals(product.product_id) && favorite.favorite_user.equals(UID)) {
+                                        item.getRef().removeValue().addOnFailureListener(
+                                                e -> Log.d(TAG, e.getMessage())
+                                        ).addOnSuccessListener(onDelete);
+                                        found = true;
+                                    }
+                                }
+                                if (!found) {
+                                    mReference.child(NODE_FAVORITE).child(idFavorite).updateChildren(mapProduct).addOnSuccessListener(onSuccess);
+                                }
+                            } else {
+                                mReference.child(NODE_FAVORITE).child(idFavorite).updateChildren(mapProduct).addOnSuccessListener(onSuccess);
+                            }
                         }
-                );
+                    }
+            );
+
+        }
     }
+
+    public void isProductFavorite(Product product, ValueEventListener onComplete) {
+        if (product != null) {
+            mReference.child(NODE_FAVORITE).orderByChild(FAVORITE_PRODUCT).equalTo(product.product_id).addListenerForSingleValueEvent(onComplete);
+        }
+    }
+
+
 }

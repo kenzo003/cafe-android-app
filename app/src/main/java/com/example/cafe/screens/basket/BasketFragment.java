@@ -22,6 +22,7 @@ import com.example.cafe.models.Basket;
 import com.example.cafe.models.BasketProduct;
 import com.example.cafe.models.Product;
 import com.example.cafe.utilits.constants;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class BasketFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void init() {
         mViewModel = new ViewModelProvider(this).get(BasketViewModel.class);
-        basketAdapter = new BasketAdapter(new LinkedList<>(), getContext());
+        basketAdapter = new BasketAdapter(new LinkedList<>(), getContext(), mViewModel);
         RecyclerView mRecyclerView = mBinding.bfRecycler;
         mRecyclerView.setAdapter(basketAdapter);
 
@@ -123,6 +124,30 @@ public class BasketFragment extends Fragment {
                         }
                     } catch (Exception e) {
                         Log.d(constants.TAG, e.getMessage()); //Если вдруг что-то пошло не так, но должно работать как часы
+                    }
+                }
+        );
+
+        basketAdapter.setOnFavoriteClickListener(
+                new BasketAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Product product = basketAdapter.getProduct(position).getProduct();
+                        if (product != null) {
+                            mViewModel.insertProductFavorite(product,
+                                    new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            basketAdapter.notifyItemChanged(position);
+                                        }
+                                    },
+                                    new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            basketAdapter.notifyItemChanged(position);
+                                        }
+                                    });
+                        }
                     }
                 }
         );

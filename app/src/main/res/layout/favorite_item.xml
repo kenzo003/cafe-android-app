@@ -29,6 +29,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:text="sdsadsa"
                 android:id="@+id/fi_txt_v_product_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -46,69 +47,33 @@
                 android:id="@+id/fi_btn_product_favorite_add"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@drawable/ic_favorite"
-                app:layout_constraintEnd_toEndOf="@id/fi_btn_product_delete"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_favorite_black"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/fi_txt_v_product_name" />
 
             <TextView
-                android:id="@+id/fp_txt_v_product_price"
+                android:id="@+id/fi_txt_v_product_price"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@id/fi_txt_v_product_name"
-                app:layout_constraintBottom_toTopOf="@+id/bi_lin_la"
-                app:layout_constraintTop_toBottomOf="@id/fi_txt_v_product_name"
+                android:text="200 Р"
+                app:layout_constraintStart_toStartOf="@+id/fi_txt_v_product_name"
+                app:layout_constraintBottom_toBottomOf="@id/fi_btn_product_delete"
                 />
 
             <Button
                 android:id="@+id/fi_btn_product_delete"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/ic_delete"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="@id/bi_lin_la"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="SmallSp" />
-
-            <LinearLayout
-                android:id="@+id/bi_lin_la"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@id/fi_txt_v_product_name"
-                app:layout_constraintTop_toBottomOf="@id/fp_txt_v_product_price"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/add_basket"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                >
-
-                <Button
-                    android:id="@+id/fp_btn_minus"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/del"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/fp_txt_v_product_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:paddingHorizontal="15dp"
-                    android:text="@string/_0"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/fp_btn_plus"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

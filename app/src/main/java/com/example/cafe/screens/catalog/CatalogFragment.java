@@ -2,9 +2,11 @@ package com.example.cafe.screens.catalog;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -17,7 +19,7 @@ import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.CatalogFragmentBinding;
 import com.example.cafe.models.Product;
 import com.example.cafe.utilits.constants;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,14 +45,13 @@ public class CatalogFragment extends Fragment {
     private void init() {
         id = "";
         mViewModel = new ViewModelProvider(this).get(CatalogViewModel.class); //TODO; проверить
-        catalogAdapter = new CatalogAdapter(new LinkedList<>(), getContext());
+        catalogAdapter = new CatalogAdapter(new LinkedList<>(), getContext(), mViewModel);
         RecyclerView mRecyclerView = mBinding.cfRecVCatalog;
         mRecyclerView.setAdapter(catalogAdapter);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//        mViewModel.insertProduct(new Product("", "Виски", "гр", "40 летний", "1212", "1200", "23", "VISIBLE", "dfsfsdfdsfsdfds", "" ));
         catalogAdapter.setOnCatalogClickListener(
                 (view, position) -> {
                     try {
@@ -74,7 +75,32 @@ public class CatalogFragment extends Fragment {
                     if (product != null) {
                         //Передаем модель и переходим к карточке новости
                         mViewModel.insertProductBasket(product.product_id, "1", product.product_quantity,
-                                unused -> Snackbar.make(requireContext(), mBinding.getRoot(), "Товар добавлен в корзину", Snackbar.LENGTH_SHORT).show());
+                                unused -> {
+                                    Toast t = Toast.makeText(getContext(), "Товар добавлен в корзину", Toast.LENGTH_SHORT);
+                                    t.setGravity(Gravity.TOP, 10, 0);
+                                    t.show();
+                                });
+                    }
+                }
+        );
+
+        catalogAdapter.setOnFavoriteClickListener(
+                (view, position) -> {
+                    Product product = catalogAdapter.getProduct(position);
+                    if (product != null) {
+                        mViewModel.insertProductFavorite(product,
+                                new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        catalogAdapter.notifyItemChanged(position);
+                                    }
+                                },
+                                new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        catalogAdapter.notifyItemChanged(position);
+                                    }
+                                });
                     }
                 }
         );
@@ -89,7 +115,7 @@ public class CatalogFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        activity = (MainActivity)getActivity();
+        activity = (MainActivity) getActivity();
         mBinding = CatalogFragmentBinding.inflate(inflater);
         return mBinding.getRoot();
     }

@@ -30,14 +30,6 @@ public class AppFirebaseRepository implements DataBaseRepository {
 
     @Override
     public void updateUserInfo(String name, String surname, String email_address, String phone_number, String city, String gender, OnSuccessListener<? super Void> onSuccess, OnFailureListener onFail) {
-//        User user = new User(name, surname, email_address, phone_number, city, gender, );
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("USER_NAME", name);
-//        map.put("USER_SURNAME", surname);
-//        map.put("USER_EMAIL", email_address);
-//        map.put("USER_PHONE", phone_number);
-//        map.put("USER_CITY", city);
-//        map.put("USER_GENDER", gender);
         mDatabaseReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
                 .addOnSuccessListener(onSuccess)
                 .addOnFailureListener(onFail);

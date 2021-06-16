@@ -27,7 +27,6 @@ public class AllProductLiveData extends MutableLiveData<List<Product>> {
 
     private String categoryId;
 
-
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
         setProductRef();
