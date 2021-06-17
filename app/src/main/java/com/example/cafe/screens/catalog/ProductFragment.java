@@ -64,8 +64,7 @@ public class ProductFragment extends Fragment {
                 mBinding.fpTxtVProductCount.setText(String.valueOf(productCount));
 
 
-                mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black));
-
+                mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
                 mViewModel.isProductFavorite(product,
                         o -> mBinding.ciBtnProductFavoriteAdd.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black)), null);
 

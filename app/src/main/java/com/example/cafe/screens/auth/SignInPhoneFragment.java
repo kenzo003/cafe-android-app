@@ -62,6 +62,9 @@ public class SignInPhoneFragment extends Fragment {
         userViewModel = ((MainActivity) getActivity()).getUserViewModel();
         hide();
 
+        mBinding.fsipBtnFab.setOnClickListener(
+                v -> activity.navController.navigateUp()
+        );
         mBinding.fpRepeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

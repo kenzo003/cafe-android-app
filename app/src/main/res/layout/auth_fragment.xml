@@ -27,8 +27,9 @@
         <ImageView
             android:id="@+id/lf_img_v_logo"
             android:layout_width="250dp"
-            android:layout_height="200dp"
-            android:background="@drawable/logo_auth"
+            android:layout_height="250dp"
+            android:src="@drawable/logo_auth"
+
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@id/lf_txt_v_logo_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +42,9 @@
             style="@style/Theme.Cafe.AuthTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Название кофейни"
+            android:text="
+"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

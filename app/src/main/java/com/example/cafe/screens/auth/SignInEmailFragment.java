@@ -46,6 +46,7 @@ public class SignInEmailFragment extends Fragment {
         activity = ((MainActivity) getActivity());
         userViewModel = ((MainActivity) getActivity()).getUserViewModel();
 
+        mBinding.feBtnFab.setOnClickListener(v -> activity.navController.navigateUp());
         mBinding.feBtnForgot.setOnClickListener(
                 v -> {
                     String email = mBinding.feEditEmail.getText().toString().trim();

@@ -72,6 +72,8 @@ public class LoginFragment extends Fragment {
         userViewModel = ((MainActivity) getActivity()).getUserViewModel();
         otpVewModel = new ViewModelProvider(this).get(OTPVewModel.class);
         hide();
+
+        mBinding.lfBtnFab.setOnClickListener(v -> activity.navController.navigateUp());
         mBinding.lfBtnSignupEnter.setOnClickListener(
                 v -> {
                     sms = mBinding.lfEditCode.getText().toString();
@@ -114,9 +116,9 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginUser() {
-         phone_number = mBinding.lfEditTxtPhoneNumber.getText().toString().trim();
-         birth_date = mBinding.lfEditTxtDateOfBirth.getText().toString();
-         city = mBinding.lfEditTxtCity.getText().toString().trim();
+        phone_number = mBinding.lfEditTxtPhoneNumber.getText().toString().trim();
+        birth_date = mBinding.lfEditTxtDateOfBirth.getText().toString();
+        city = mBinding.lfEditTxtCity.getText().toString().trim();
 
         int gend = mBinding.lfEditTxtGender.getCheckedRadioButtonId();
         if (gend == R.id.lf_edit_txt_gender_m)
@@ -124,10 +126,10 @@ public class LoginFragment extends Fragment {
         else
             gender = "woman";
 
-         customers = constants.ID_CUSTOMER;
-         address = "";
-         name = mBinding.lfEditTxtName.getText().toString().trim();
-         surname = mBinding.lfEditTxtSurname.getText().toString().trim();
+        customers = constants.ID_CUSTOMER;
+        address = "";
+        name = mBinding.lfEditTxtName.getText().toString().trim();
+        surname = mBinding.lfEditTxtSurname.getText().toString().trim();
 
         if (
                 Validate.phoneValid(mBinding.lfEditTxtPhoneNumber, phone_number) &&

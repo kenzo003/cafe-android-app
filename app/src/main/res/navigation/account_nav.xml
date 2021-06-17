@@ -12,7 +12,8 @@
         tools:layout="@layout/account_fragment" >
         <action
             android:id="@+id/action_accountFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
+            app:destination="@id/favoriteFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -21,8 +22,7 @@
         <action
             android:id="@+id/action_favoriteFragment_to_productFragment2"
             app:destination="@id/productFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/productFragment"

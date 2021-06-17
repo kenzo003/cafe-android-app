@@ -8,29 +8,28 @@
     <fragment
         android:id="@+id/authFragment2"
         android:name="com.example.cafe.screens.auth.AuthFragment"
-        android:label="auth_fragment"
-        tools:layout="@layout/auth_fragment" >
+        tools:layout="@layout/fragment_sign_in_phone">
         <action
             android:id="@+id/action_authFragment2_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
         <action
             android:id="@+id/action_authFragment2_to_signInPhoneFragment"
-            app:destination="@id/signInPhoneFragment" />
+            app:destination="@id/signInPhoneFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
         <action
             android:id="@+id/action_authFragment2_to_signInEmailFragment"
-            app:destination="@id/signInEmailFragment" />
+            app:destination="@id/signInEmailFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.cafe.screens.auth.LoginFragment"
-        android:label="login_fragment"
         tools:layout="@layout/login_fragment" />
     <fragment
         android:id="@+id/signInPhoneFragment"
-        android:name="com.example.cafe.screens.auth.SignInPhoneFragment"
-        android:label="SignInPhoneFragment" />
+        android:name="com.example.cafe.screens.auth.SignInPhoneFragment" />
     <fragment
         android:id="@+id/signInEmailFragment"
-        android:name="com.example.cafe.screens.auth.SignInEmailFragment"
-        android:label="SignInEmailFragment" />
+        android:name="com.example.cafe.screens.auth.SignInEmailFragment" />
 </navigation>
