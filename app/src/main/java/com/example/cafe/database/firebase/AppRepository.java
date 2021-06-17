@@ -457,9 +457,48 @@ public class AppRepository {
 
     public void isProductFavorite(Product product, ValueEventListener onComplete) {
         if (product != null) {
-            mReference.child(NODE_FAVORITE).orderByChild(FAVORITE_PRODUCT).equalTo(product.product_id).addListenerForSingleValueEvent(onComplete);
+            mReference.child(NODE_FAVORITE).orderByChild(FAVORITE_USER).equalTo(UID).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            for (DataSnapshot item : snapshot.getChildren()) {
+                                String key = item.getKey();
+                                if (item.getValue(Favorite.class).favorite_product.equals(product.product_id)){
+                                    mReference.child(NODE_FAVORITE).child(key).get().addOnSuccessListener(null);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    }
+            );
         }
     }
 
+    public void isProductFavorite(Product product, OnSuccessListener onSuccessListener, OnFailureListener onFailureListener) {
+        if (product != null) {
+            mReference.child(NODE_FAVORITE).orderByChild(FAVORITE_USER).equalTo(UID).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            for (DataSnapshot item : snapshot.getChildren()) {
+                                String key = item.getKey();
+                                if (item.getValue(Favorite.class).favorite_product.equals(product.product_id)){
+                                    mReference.child(NODE_FAVORITE).child(key).get().addOnSuccessListener(onSuccessListener).addOnFailureListener(onFailureListener);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    }
+            );
+        }
+    }
 
 }

@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lf_CL_header_auth">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fp_edit_phone"
             style="@style/Theme.Cafe.EditText"
             android:layout_width="match_parent"
@@ -125,7 +125,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:text="20"
-                android:textColor="@color/colorPrimary"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>

@@ -11,12 +11,12 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.cafe.R;
 import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.FragmentSignInPhoneBinding;
+import com.example.cafe.utilits.Validate;
 import com.example.cafe.utilits.constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -69,33 +69,30 @@ public class SignInPhoneFragment extends Fragment {
             }
         });
         mBinding.fpLogin.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sms = mBinding.fpEditSms.getText().toString();
-                        hideSoftKeyboard(getActivity());
-                        if (!id.isEmpty() && !sms.isEmpty())
-                            mBinding.fpProgressBar.setVisibility(View.VISIBLE);
-                        userViewModel.signInWithCredential(id, sms,
-                                new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                                        if (task.isSuccessful())
-                                            activity.navController.navigate(R.id.news_nav);
-                                        if (task.isCanceled()) {
-                                            Log.d(constants.TAG, task.getException().getMessage());
-                                        }
+                v -> {
+                    sms = mBinding.fpEditSms.getText().toString();
+                    hideSoftKeyboard(getActivity());
+                    if (!id.isEmpty() && !sms.isEmpty())
+                        mBinding.fpProgressBar.setVisibility(View.VISIBLE);
+                    userViewModel.signInWithCredential(id, sms,
+                            new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                                    if (task.isSuccessful())
+                                        activity.navController.navigate(R.id.news_nav);
+                                    if (task.isCanceled()) {
+                                        Log.d(constants.TAG, task.getException().getMessage());
                                     }
-                                },
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull @NotNull Exception e) {
-                                        Log.d(constants.TAG, e.getMessage());
-                                        mBinding.fpProgressBar.setVisibility(View.GONE);
-                                        Snackbar.make(getContext(), mBinding.getRoot(), e.getMessage(), Snackbar.LENGTH_LONG).show();
-                                    }
-                                });
-                    }
+                                }
+                            },
+                            new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+                                    Log.d(constants.TAG, e.getMessage());
+                                    mBinding.fpProgressBar.setVisibility(View.GONE);
+                                    Snackbar.make(getContext(), mBinding.getRoot(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                }
+                            });
                 }
         );
 
@@ -103,12 +100,12 @@ public class SignInPhoneFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        phone = mBinding.fpEditPhone.getText().toString().trim();
 
-                        mBinding.fpProgressBar.setVisibility(View.VISIBLE);
-                        phone = mBinding.fpEditPhone.getText().toString();
-                        hideSoftKeyboard(getActivity());
+                        if (Validate.phoneValid(mBinding.fpEditPhone, phone)) {
+                            mBinding.fpProgressBar.setVisibility(View.VISIBLE);
+                            hideSoftKeyboard(activity);
 
-                        if (true) {
                             FirebaseAuth mAuth = FirebaseAuth.getInstance();
                             PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
                                     .setPhoneNumber(phone)
@@ -155,13 +152,8 @@ public class SignInPhoneFragment extends Fragment {
         );
 
 
-        otpVewModel.getTimer().observe(this,
-                new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        mBinding.fpTimer.setText(s);
-                    }
-                });
+        otpVewModel.getTimer().observe(requireActivity(),
+                s -> mBinding.fpTimer.setText(s));
 
 
     }

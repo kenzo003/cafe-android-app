@@ -19,9 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cafe.R;
 import com.example.cafe.models.Product;
 import com.example.cafe.utilits.Utils;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -83,22 +81,6 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
                 .apply(requestOptions)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.logo);
-
-        catalogViewModel.isProductFavorite(model,
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        if (snapshot.exists())
-                        holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite_black));
-                        else
-                            holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                        holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
-                    }
-                });
     }
 
     @Override
@@ -147,6 +129,16 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.CatalogV
         private void bind(Product product) {
             name.setText(product.product_name);
             price.setText(product.product_price + " Р");
+            addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
+            catalogViewModel.isProductFavorite(product,
+                    new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite_black));
+                        }
+                    },
+                    null
+            );
         }
 
         private void onBasketClick(View view) {

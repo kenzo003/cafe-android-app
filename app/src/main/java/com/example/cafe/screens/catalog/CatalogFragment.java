@@ -2,7 +2,6 @@ package com.example.cafe.screens.catalog;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.CatalogFragmentBinding;
 import com.example.cafe.models.Product;
 import com.example.cafe.utilits.constants;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -76,9 +74,8 @@ public class CatalogFragment extends Fragment {
                         //Передаем модель и переходим к карточке новости
                         mViewModel.insertProductBasket(product.product_id, "1", product.product_quantity,
                                 unused -> {
-                                    Toast t = Toast.makeText(getContext(), "Товар добавлен в корзину", Toast.LENGTH_SHORT);
-                                    t.setGravity(Gravity.TOP, 10, 0);
-                                    t.show();
+                                    Toast.makeText(getContext(), "Товар добавлен в корзину", Toast.LENGTH_SHORT).show();
+
                                 });
                     }
                 }
@@ -89,18 +86,8 @@ public class CatalogFragment extends Fragment {
                     Product product = catalogAdapter.getProduct(position);
                     if (product != null) {
                         mViewModel.insertProductFavorite(product,
-                                new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        catalogAdapter.notifyItemChanged(position);
-                                    }
-                                },
-                                new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        catalogAdapter.notifyItemChanged(position);
-                                    }
-                                });
+                                unused -> catalogAdapter.notifyItemChanged(position),
+                                unused -> catalogAdapter.notifyItemChanged(position));
                     }
                 }
         );

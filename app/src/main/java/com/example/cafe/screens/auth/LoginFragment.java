@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.cafe.R;
 import com.example.cafe.activities.MainActivity;
 import com.example.cafe.databinding.LoginFragmentBinding;
+import com.example.cafe.utilits.Validate;
 import com.example.cafe.utilits.constants;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
@@ -38,6 +39,15 @@ public class LoginFragment extends Fragment {
     private String id;
     private String sms;
     private MainActivity activity;
+
+    String phone_number;
+    String birth_date;
+    String city;
+    String gender;
+    String customers;
+    String address;
+    String name;
+    String surname;
 
 
     public static LoginFragment newInstance() {
@@ -64,16 +74,6 @@ public class LoginFragment extends Fragment {
         hide();
         mBinding.lfBtnSignupEnter.setOnClickListener(
                 v -> {
-
-                    String phone_number = mBinding.lfEditTxtPhoneNumber.getText().toString().trim();
-                    String birth_date = mBinding.lfEditTxtDateOfBirth.getText().toString();
-                    String city = mBinding.lfEditTxtCity.getText().toString().trim();
-                    String gender = "male";
-                    String customers = constants.ID_CUSTOMER;
-                    String address = "";
-                    String name = mBinding.lfEditTxtName.getText().toString().trim();
-                    String surname = mBinding.lfEditTxtSurname.getText().toString().trim();
-
                     sms = mBinding.lfEditCode.getText().toString();
                     hideSoftKeyboard(getActivity());
 
@@ -114,10 +114,28 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginUser() {
-        String phone_number = mBinding.lfEditTxtPhoneNumber.getText().toString().trim();
-        mBinding.fpProgressBar.setVisibility(View.VISIBLE);
+         phone_number = mBinding.lfEditTxtPhoneNumber.getText().toString().trim();
+         birth_date = mBinding.lfEditTxtDateOfBirth.getText().toString();
+         city = mBinding.lfEditTxtCity.getText().toString().trim();
 
-        if (!phone_number.isEmpty()) {
+        int gend = mBinding.lfEditTxtGender.getCheckedRadioButtonId();
+        if (gend == R.id.lf_edit_txt_gender_m)
+            gender = "man";
+        else
+            gender = "woman";
+
+         customers = constants.ID_CUSTOMER;
+         address = "";
+         name = mBinding.lfEditTxtName.getText().toString().trim();
+         surname = mBinding.lfEditTxtSurname.getText().toString().trim();
+
+        if (
+                Validate.phoneValid(mBinding.lfEditTxtPhoneNumber, phone_number) &&
+                        Validate.nameValid(mBinding.lfEditTxtName, name) &&
+                        Validate.nameValid(mBinding.lfEditTxtSurname, surname) &&
+                        Validate.nameValid(mBinding.lfEditTxtCity, city) &&
+                        Validate.dateValid(mBinding.lfEditTxtDateOfBirth, birth_date)) {
+            mBinding.fpProgressBar.setVisibility(View.VISIBLE);
             PhoneAuthOptions options = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
                     .setPhoneNumber(phone_number)
                     .setTimeout(60L, TimeUnit.SECONDS)

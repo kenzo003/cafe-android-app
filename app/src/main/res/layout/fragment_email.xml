@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lf_CL_header_auth">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fe_edit_email"
             style="@style/Theme.Cafe.EditText"
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fe_edit_password"
             style="@style/Theme.Cafe.EditText"
             android:layout_width="match_parent"

@@ -6,12 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".screens.account.AccountFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello User" />
-
     <Button
+        android:layout_marginHorizontal="30dp"
         android:id="@+id/af_btn_signout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:layout_marginHorizontal="30dp"
         android:id="@+id/af_btn_favorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

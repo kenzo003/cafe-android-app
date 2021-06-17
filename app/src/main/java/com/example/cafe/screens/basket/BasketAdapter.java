@@ -19,15 +19,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cafe.R;
 import com.example.cafe.models.BasketProduct;
 import com.example.cafe.utilits.Utils;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketViewHolder>{
+public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketViewHolder> {
     private List<BasketProduct> basketProducts;
     private OnItemClickListener OnItemClickListener;
     private OnItemClickListener OnItemBasketClickListener;
@@ -59,7 +56,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
     }
 
     public void deleteProduct(int position) {
-        if (position >= 0 && position < basketProducts.size()){
+        if (position >= 0 && position < basketProducts.size()) {
             basketProducts.remove(position);
             notifyDataSetChanged();
         }
@@ -92,23 +89,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
                 .apply(requestOptions)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.logo);
-
-        basketViewModel.isProductFavorite(model.getProduct(),
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        if (snapshot.exists())
-                            holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite_black));
-                        else
-                            holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                        holder.addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
-                    }
-                });
-
     }
 
     @Override
@@ -119,10 +99,10 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
             return 0;
     }
 
-    public String getPrice(){
+    public String getPrice() {
         int price = 0;
-        for (BasketProduct item: basketProducts) {
-            price+=Integer.parseInt(item.getPriceBasket());
+        for (BasketProduct item : basketProducts) {
+            price += Integer.parseInt(item.getPriceBasket());
         }
         return String.valueOf(price);
     }
@@ -184,6 +164,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.BasketView
             name.setText(basketProduct.getProduct().product_name);
             price.setText(basketProduct.getProduct().product_price + " Р");
             count.setText(basketProduct.getCountProduct());
+            addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite));
+            basketViewModel.isProductFavorite(basketProduct.getProduct(),
+                    o -> addFavorite.setBackground(context.getDrawable(R.drawable.ic_favorite_black)),
+                    null
+            );
         }
 
         private void onMinusClick(View view) {

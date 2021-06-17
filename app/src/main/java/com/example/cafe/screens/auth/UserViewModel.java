@@ -35,10 +35,6 @@ public class UserViewModel extends AndroidViewModel {
         repository.verificationSMS(phone_number, typeRequest, activity, onCodeSent);
     }
 
-//    public void signupUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnCompleteListener<AuthResult> onComplete) {
-//        repository.signupUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id, onComplete);
-//    }
-
     public void insertUser(String name, String surname, String email_address, String phone_number, String city, String gender, String birth_date, String address, String password, String customer_id, OnSuccessListener onSuccessListener, OnFailureListener onFailureListener){
         repository.insertUser(name, surname, email_address, phone_number, city, gender, birth_date, address, password, customer_id, onSuccessListener, onFailureListener);
     }

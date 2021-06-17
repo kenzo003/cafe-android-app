@@ -7,6 +7,7 @@ import com.example.cafe.database.firebase.AppRepository;
 import com.example.cafe.models.Basket;
 import com.example.cafe.models.BasketProduct;
 import com.example.cafe.models.Product;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ValueEventListener;
 
@@ -41,5 +42,9 @@ public class BasketViewModel extends ViewModel {
 
     public void isProductFavorite(Product product, ValueEventListener onComplete) {
         repository.isProductFavorite(product, onComplete);
+    }
+
+    public void isProductFavorite(Product product, OnSuccessListener onSuccessListener, OnFailureListener onFailureListener){
+        repository.isProductFavorite(product, onSuccessListener, onFailureListener);
     }
 }
