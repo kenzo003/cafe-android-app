@@ -488,6 +488,7 @@ public class AppRepository {
                                 String key = item.getKey();
                                 if (item.getValue(Favorite.class).favorite_product.equals(product.product_id)){
                                     mReference.child(NODE_FAVORITE).child(key).get().addOnSuccessListener(onSuccessListener).addOnFailureListener(onFailureListener);
+                                    break;
                                 }
                             }
                         }

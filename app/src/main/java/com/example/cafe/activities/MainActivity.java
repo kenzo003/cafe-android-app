@@ -3,6 +3,8 @@ package com.example.cafe.activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
                     hideToolbarAndNavBar();
                     break;
                 }
-                case R.id.basketFragment2: {
+                case R.id.categoryFragment:
+                case R.id.catalogFragment2:
+                case R.id.basketFragment2:
+                {
                     mToolbar.setVisibility(View.GONE);
                     mBottomNavigation.setVisibility(View.VISIBLE);
                     break;
@@ -88,5 +93,13 @@ public class MainActivity extends AppCompatActivity {
     private void hideToolbarAndNavBar() {
         mBottomNavigation.setVisibility(View.GONE);
         mToolbar.setVisibility(View.GONE);
+    }
+
+    private void setStatusBarColor(){
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(this.getResources().getColor(R.color.color_on_primary));
     }
 }

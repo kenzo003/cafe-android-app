@@ -23,7 +23,7 @@
                 android:id="@+id/fp_img_v_product_logo"
                 android:layout_width="0dp"
                 android:layout_height="300dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 android:background="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
