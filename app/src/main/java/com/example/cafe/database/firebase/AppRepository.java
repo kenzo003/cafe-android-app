@@ -15,6 +15,7 @@ import com.example.cafe.models.News;
 import com.example.cafe.models.NewsUser;
 import com.example.cafe.models.Product;
 import com.example.cafe.models.User;
+import com.example.cafe.utilits.constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -103,6 +104,10 @@ public class AppRepository {
         allProduct = new AllProductLiveData();
         allProductBasket = new BasketLiveData();
         allProductFavorite = new FavoriteLiveData();
+    }
+
+    public void getUserData(OnSuccessListener<? super DataSnapshot> listener){
+        mReference.child(constants.NODE_USERS).child(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(listener);
     }
 
     public MutableLiveData<List<News>> getAllNews() {

@@ -60,6 +60,13 @@ public class BasketFragment extends Fragment {
 
         hideDownPanel();
 
+        mBinding.bfBtnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.navController.navigate(R.id.action_basketFragment2_to_orderFragment);
+            }
+        });
+
         basketAdapter.setOnItemMinusClickListener(
                 (view, position) -> {
                     try {

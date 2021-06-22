@@ -23,4 +23,7 @@ public class User {
         this.gender = gender;
         this.address = address;
     }
+
+    public User() {
+    }
 }

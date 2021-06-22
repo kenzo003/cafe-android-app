@@ -20,7 +20,7 @@
     <string name="email">Email</string>
     <string name="gender_m">Муж</string>
     <string name="gender_w">Жен</string>
-    <string name="register">Зарегестрироваться</string>
+    <string name="register">Зарегистрироваться</string>
     <string name="or">или</string>
     <string name="create_new_account">создать новый аккаунт</string>
     <string name="password">Пароль</string>

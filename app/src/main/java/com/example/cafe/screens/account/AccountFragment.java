@@ -34,18 +34,17 @@ public class AccountFragment extends Fragment {
     private void init() {
         mViewModel = ((MainActivity) getActivity()).getUserViewModel();
         mBinding.afBtnSignout.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mViewModel.signOut();
-                        ((MainActivity)requireActivity()).navController.navigate(R.id.auth_nav);
-                    }
+                v -> {
+                    mViewModel.signOut();
+                    ((MainActivity)requireActivity()).navController.navigate(R.id.auth_nav);
                 }
         );
         
         mBinding.afBtnFavorite.setOnClickListener(
                 v -> ((MainActivity)getActivity()).navController.navigate(R.id.action_accountFragment_to_favoriteFragment)
         );
+
+        mBinding.afBtnUserData.setOnClickListener(v -> ((MainActivity)getActivity()).navController.navigate(R.id.action_accountFragment_to_userDataFragment));
 
     }
 }

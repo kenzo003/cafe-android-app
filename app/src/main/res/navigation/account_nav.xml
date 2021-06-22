@@ -14,6 +14,9 @@
             android:id="@+id/action_accountFragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment"
             app:enterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_accountFragment_to_userDataFragment"
+            app:destination="@id/userDataFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -29,4 +32,9 @@
         android:name="com.example.cafe.screens.catalog.ProductFragment"
         android:label="fragment_product"
         tools:layout="@layout/fragment_product" />
+    <fragment
+        android:id="@+id/userDataFragment"
+        android:name="com.example.cafe.screens.account.UserDataFragment"
+        android:label="Личные данные"
+        tools:layout="@layout/fragment_user_data" />
 </navigation>

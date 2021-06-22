@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.account.UserDataFragment">
+
+    <TextView
+        android:id="@+id/fud_txt_v_name"
+        style="@style/Theme.Cafe.AuthTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:elevation="8dp"
+        android:text="Alexandr Lagutenko"
+        android:textColor="@color/text_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:paddingVertical="10dp"
+        android:id="@+id/fud_txt_v_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="30dp"
+        android:background="@color/browser_actions_bg_grey"
+        android:paddingHorizontal="30dp"
+        android:text="Учетный данные"
+        android:textColor="@color/text_black"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/fud_txt_v_name"></TextView>
+
+    <Button
+        android:id="@+id/fud_txt_v_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSurface"
+        android:paddingHorizontal="30dp"
+        android:hint="@string/phone_number"
+        android:textAlignment="textStart"
+        android:textColor="@color/text_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fud_txt_v_text" />
+
+
+    <Button
+        android:id="@+id/fud_txt_v_birth_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fud_txt_v_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSurface"
+        android:paddingHorizontal="30dp"
+        android:hint="@string/date_of_birth"
+        android:textAllCaps="false"
+        android:textAlignment="textStart"
+        android:textColor="@color/text_black"/>
+
+    <Button
+        android:id="@+id/fud_txt_v_gender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fud_txt_v_birth_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSurface"
+        android:paddingHorizontal="30dp"
+        android:hint="Пол"
+        android:textAllCaps="false"
+        android:textAlignment="textStart"
+        android:textColor="@color/text_black"/>
+
+    <Button
+        android:id="@+id/fud_txt_v_city"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fud_txt_v_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSurface"
+        android:paddingHorizontal="30dp"
+        android:hint="@string/city"
+        android:textAllCaps="false"
+        android:textAlignment="textStart"
+        android:textColor="@color/text_black"/>
+
+    <Button
+        android:id="@+id/fud_txt_v_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fud_txt_v_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSurface"
+        android:paddingHorizontal="30dp"
+        android:hint="@string/email"
+        android:textAllCaps="false"
+        android:textAlignment="textStart"
+        android:textColor="@color/text_black"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

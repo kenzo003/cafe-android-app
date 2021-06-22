@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.cafe.database.firebase.AppRepository;
 import com.example.cafe.models.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,4 +36,10 @@ public class AccountViewModel extends AndroidViewModel {
     public void insertProductFavorite(Product product, OnSuccessListener<? super Void> onSuccess, OnSuccessListener<? super Void> onDelete) {
         repository.updateProductFavorite(product, onSuccess, onDelete);
     }
+
+
+    public void getUserData(OnSuccessListener<? super DataSnapshot> listener){
+        repository.getUserData(listener);
+    }
+
 }
